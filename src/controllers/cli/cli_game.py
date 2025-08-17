@@ -10,7 +10,6 @@ from actions import Option
 
 from controllers.cli.player_factory import PlayerFactory
 from controllers.cli.player_input import PlayerInput
-from controllers.cli.player_set_actions import PlayerSetActions, Actions
 from controllers.cli.renderer import Renderer
 
 class CLIGame:

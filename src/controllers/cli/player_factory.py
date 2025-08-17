@@ -6,7 +6,7 @@ from agent import Agent
 from controllers.cli.player_interface import PlayerInterface
 from controllers.cli.player_input import PlayerInput
 from controllers.cli.player_agent import PlayerAgent
-from controllers.cli.player_set_actions import PlayerSetActions, Actions
+from controllers.cli.player_set_input import PlayerSetInput, Actions
 from controllers.cli.renderer import Renderer
 
 class PlayerFactory:
@@ -42,7 +42,7 @@ class PlayerFactory:
 
     def make_player(self, checker: Checker, player_actions: Actions):
         if (player_actions is not None):
-            return PlayerSetActions(checker, player_actions)
+            return PlayerSetInput(checker, player_actions)
         if (checker == Checker.YELLOW):
             return PlayerAgent(checker, Agent(), self.__renderer)
 

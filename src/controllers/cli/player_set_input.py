@@ -3,10 +3,13 @@ from actions import Action, Option
 from checker import Checker
 from board import Board
 from controllers.cli.player_interface import PlayerInterface
+from controllers.cli.player_input import PlayerInput
 
 type Actions = list[Action]
 
-class PlayerSetActions(PlayerInterface):
+# Player with hard coded inputs, as if they entered them via the cli
+# Used in testing
+class PlayerSetInput(PlayerInterface):
 
     def __init__(self, checker: Checker, actions: Actions):
         self.__actions = actions.copy()
@@ -15,4 +18,7 @@ class PlayerSetActions(PlayerInterface):
     def select_action(self, board: Board) -> Action:
         if len(self.__actions) == 0:
             return Option.QUIT
-        return self.__actions.pop(0)
+        action = self.__actions.pop(0)
+        if action == PlayerInput.QUIT_CHAR:
+            return Option.QUIT
+        return int(action) - 1

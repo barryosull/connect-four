@@ -6,6 +6,7 @@ from actions import Action, Option
 from controllers.cli.renderer import Renderer
 from controllers.cli.player_interface import PlayerInterface
 
+# Player that takes input from the CLI
 class PlayerInput(PlayerInterface):
 
     QUIT_CHAR = 'q'

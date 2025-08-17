@@ -1,7 +1,7 @@
 
 from controllers.cli.player_factory import PlayerFactory
 from controllers.cli.player_input import PlayerInput
-from controllers.cli.player_set_actions import PlayerSetActions
+from controllers.cli.player_set_input import PlayerSetInput
 from controllers.cli.player_agent import PlayerAgent
 
 class TestPlayerFactory:
@@ -25,5 +25,5 @@ class TestPlayerFactory:
         
         players = factory.make_players(cli_args) 
 
-        set_action_players = list(filter(lambda player: isinstance(player, PlayerSetActions), players))
+        set_action_players = list(filter(lambda player: isinstance(player, PlayerSetInput), players))
         assert(len(set_action_players) == 2)
