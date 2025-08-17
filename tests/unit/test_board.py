@@ -47,10 +47,10 @@ class TestBoard:
         ])
 
         last_move_coord = (3, 4)
-        actual = board.find_winner(last_move_coord)
+        actual = board.find_winner(Checker.RED, last_move_coord)
 
         # Board coords
-        expected = Winner('r', [[(1, 4), (2, 4), (3, 4), (4, 4)]])
+        expected = Winner(Checker.RED, [[(1, 4), (2, 4), (3, 4), (4, 4)]])
         assert(expected == actual)
 
     def test_find_winner_vertical(self): 
@@ -64,10 +64,10 @@ class TestBoard:
         ])
 
         last_move_coord = (3, 2)
-        actual = board.find_winner(last_move_coord)
+        actual = board.find_winner(Checker.RED, last_move_coord)
 
         # Board coords
-        expected = Winner('r', [[(3, 2), (3, 3), (3, 4), (3, 5)]])
+        expected = Winner(Checker.RED, [[(3, 2), (3, 3), (3, 4), (3, 5)]])
         assert(expected == actual)
 
     def test_find_winner_diagonally_down(self):
@@ -81,10 +81,10 @@ class TestBoard:
         ]) 
 
         last_move_coord = [1, 2]
-        actual = board.find_winner(last_move_coord)
+        actual = board.find_winner(Checker.RED, last_move_coord)
 
         # Board coords
-        expected = Winner('r', [[(1, 2), (2, 3), (3, 4), (4, 5)]])
+        expected = Winner(Checker.RED, [[(1, 2), (2, 3), (3, 4), (4, 5)]])
         assert(expected == actual)
 
     def test_find_winner_diagonally_down(self):
@@ -98,10 +98,10 @@ class TestBoard:
         ]) 
 
         last_move_coord = (3, 2)
-        actual = board.find_winner(last_move_coord)
+        actual = board.find_winner(Checker.RED, last_move_coord)
 
         # Board coords
-        expected = Winner('r', [[(0, 5), (1, 4), (2, 3), (3, 2)]])
+        expected = Winner(Checker.RED, [[(0, 5), (1, 4), (2, 3), (3, 2)]])
         assert(expected == actual)
 
     def test_find_winner_with_multiple_win_lines(self):
@@ -115,10 +115,10 @@ class TestBoard:
         ]) 
 
         last_move_coord = (3, 2)
-        actual = board.find_winner(last_move_coord)
+        actual = board.find_winner(Checker.RED, last_move_coord)
 
         # Board coords
-        expected = Winner('r', [
+        expected = Winner(Checker.RED, [
             [(3, 2), (3, 3), (3, 4), (3, 5)], # Center down
             [(3, 2), (4, 3), (5, 4), (6, 5)], # Center diagonal down 
             [(0, 5), (1, 4), (2, 3), (3, 2)], # Bottom left diagonal up 

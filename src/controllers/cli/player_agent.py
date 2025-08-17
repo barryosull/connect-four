@@ -1,4 +1,5 @@
 
+import time
 from actions import Action, Option
 from checker import Checker
 from board import Board
@@ -18,4 +19,6 @@ class PlayerAgent(PlayerInterface):
 
     def select_action(self, board: Board) -> Action:
         # Pretend to think
+        self.__renderer.print_agent_thinking()
+        time.sleep(2)
         return self.__agent.select_next_slot(self.checker, board)

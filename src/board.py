@@ -1,13 +1,15 @@
 
+from typing import Self
+from checker import Checker
 type BoardCells = list[list[str]]
 type Coord = tuple[int, int]
 type Line = list[Coord]
-from typing import Self
+type Move = dict[Coord, list[Line]]
 
 # Todo Move to its own file
 class Winner:
 
-    def __init__(self, checker: str, lines: list[list[Coord]]):
+    def __init__(self, checker: Checker, lines: list[list[Coord]]):
         self.checker = checker
         self.lines = lines
 
@@ -36,7 +38,7 @@ class Board:
     # Comannds 
     #############
     
-    def drop_checker(self, checker: str, slot: int) -> Coord|None:
+    def drop_checker(self, checker: Checker, slot: int) -> Coord|None:
         coord = self.find_free_coord(slot)
         if (coord is None):
             return None
@@ -65,24 +67,20 @@ class Board:
     def is_valid_drop(self, slot: int) -> bool: 
         return self.find_free_coord(slot) is not None
 
-    def game_can_continue(self) -> bool:
-        return self.winner() is None and self.is_full == False
-
     def is_full(self) -> bool:
         return '-' not in self.__cells[0]
 
     def export_cells(self) -> BoardCells:
         return self.__cells
 
-    def find_winner(self, last_move: Coord) -> Winner|None:
+    def find_winner(self, checker: Checker, coord: Coord) -> Winner|None:
+        [x, y] = coord
 
-        [x, y] = last_move
-        checker = self.__cells[y][x]
-
-        directional_lines = self.directional_lines(last_move)
-        lines_with_coord = self.filter_lines_when_checker_is_at_coord(checker, last_move, directional_lines)
+        directional_lines = self.directional_lines(coord)
+        lines_with_coord = self.filter_lines_when_checker_is_at_coord(str(checker), coord, directional_lines)
     
         winning_lines = list(filter(lambda line: len(line) >=4 , lines_with_coord))
+        print(checker, winning_lines)
         
         # Check for winners
         if len(winning_lines) == 0:
@@ -129,7 +127,7 @@ class Board:
 
         return [horizontal_coords, vertical_coords, down_right_coords, up_right_coords]
 
-    def filter_lines_when_checker_is_at_coord(self, checker: str, desired_coord: Coord, directional_lines: list[Line]) -> list[Line]:
+    def filter_lines_when_checker_is_at_coord(self, checker: Checker, desired_coord: Coord, directional_lines: list[Line]) -> list[Line]:
         lines = []
         for directional_line in directional_lines:
             checker_line = []
@@ -149,7 +147,7 @@ class Board:
 
         return lines
 
-    def find_line_making_moves(self, checker: str) -> dict[Coord, list[Line]]:
+    def find_line_making_moves(self, checker: Checker) -> Move:
         available_coords =  self.available_coords()
         moves = {}
         for coord in available_coords:
@@ -159,7 +157,7 @@ class Board:
                 moves[coord] = lines_with_coord
         return moves
 
-    def available_coords(self) -> list[Coord]:
+    def available_coords(self) -> Line:
         available = []
         for x in range(0, self.width()):
             coord = self.find_free_coord(x)
@@ -167,7 +165,6 @@ class Board:
                 available.append(coord)
         return available
 
-
-    def __filter_winning_lines(self, checker: str, lines: list[Line]) -> list[Line]:
+    def __filter_winning_lines(self, checker: Checker, lines: list[Line]) -> list[Line]:
         return list(filter(lambda line: len(line) >=4 , lines))
     

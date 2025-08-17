@@ -48,7 +48,7 @@ class CLIGame:
             slot = int(choice)
             
             coord = board.drop_checker(player.checker, slot)
-            winner = board.find_winner(coord)
+            winner = board.find_winner(player.checker, coord)
 
             # Next player
             player = players[0] if player == players[1] else players[1]

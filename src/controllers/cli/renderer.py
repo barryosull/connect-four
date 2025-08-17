@@ -3,6 +3,7 @@ import os
 import sys
 from pathlib import Path
 from board import Board, Winner
+from checker import Checker
 
 class Renderer:
 
@@ -28,27 +29,27 @@ class Renderer:
 
         # Slot numbers
         for row_i in range(board.width()):
-            lines += " " + str(row_i + 1)
+            lines += f" {str(row_i + 1)}"
         lines += "\n"
 
         # Slots with edges
         for y, row in enumerate(cells):
-            line = padding + "|"
+            line = f"{padding}|"
             for x, cell in enumerate(row):
 
                 # Bold and color
                 color = char_to_colour.get(cell, 38)
-                bg_color = 47 if winner and winner.is_in_list([x, y]) else 40
+                bg_color = 47 if winner and winner.is_in_list((x, y)) else 40
                 weight = 1 if cell != '-' else 0
                 cell_char = cell if cell != '-' else '-'
 
                 format = f"{weight};{color};{bg_color}"
-                line += " \033[" + format + "m" + cell_char + "\033[0m"
+                line += f" \033[{format}m{cell_char}\033[0m"
             line += " |"
-            lines += line + "\n"
+            lines += f"{line}\n"
 
         # bottom
-        lines += padding + ("=" * ((col_count * 2) + 3)) + "\n"
+        lines += f"{padding}{("=" * ((col_count * 2) + 3))}\n"
 
         print(lines)
 
@@ -65,12 +66,13 @@ class Renderer:
         title = file_path.read_text()
         print(title)
 
-    def print_winner(self, checker: str): 
-        print()
-        print("The winner is '" + checker + "'")
+    def print_agent_thinking(self):
+        print("The agent is thinking . . .")
+
+    def print_winner(self, checker: Checker): 
+        print(f"The winner is '{checker}'")
 
     def print_board_is_full(self):
-        print()
         print("Board is full, no more moves left")
 
     def print_goodbye(self):
