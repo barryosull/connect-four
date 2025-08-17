@@ -31,3 +31,17 @@ class TestMain:
         # Assert
         assert ("The winner is 'r'" not in result)
         assert ("Thanks for playing!" in result)
+
+    def test_board_is_full(self):
+
+        # Arrange
+        player1Actions = "1 1 2 2 1 1 " + "3 3 4 4 3 3 " + "5 5 6 6 5 5 " + "7 7 7"
+        player2Actions = "2 2 1 1 2 2 " + "4 4 3 3 4 4 " + "6 6 5 5 6 6 " + "7 7 7"
+
+        # Act
+        command = f"python /app/src/main.py --player1Actions {player1Actions} --player2Actions {player2Actions}"
+        result = subprocess.check_output(command, shell=True, text=True)
+        
+        # Assert
+        assert ("Board is full" in result)
+        assert ("Thanks for playing!" in result)

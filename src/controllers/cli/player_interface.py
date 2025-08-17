@@ -1,8 +1,8 @@
 
 from abc import ABC, abstractmethod
-from board import Board
-from checker import Checker
-from actions import Action
+from domain.board import Board
+from domain.checker import Checker
+from domain.actions import Action
 
 class PlayerInterface(ABC):
 

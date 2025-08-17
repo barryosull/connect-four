@@ -1,8 +1,8 @@
 
 import sys
 import argparse
-from checker import Checker
-from agent import Agent
+from domain.checker import Checker
+from domain.agent import Agent
 from controllers.cli.player_interface import PlayerInterface
 from controllers.cli.player_input import PlayerInput
 from controllers.cli.player_agent import PlayerAgent

@@ -1,8 +1,8 @@
 
 from enum import Enum
-from board import Board
-from checker import Checker
-from actions import Action, Option
+from domain.board import Board
+from domain.checker import Checker
+from domain.actions import Action, Option
 from controllers.cli.renderer import Renderer
 from controllers.cli.player_interface import PlayerInterface
 

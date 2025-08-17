@@ -1,6 +1,6 @@
 
-from board import Board, Winner
-from checker import Checker
+from domain.board import Board, Winner
+from domain.checker import Checker
 
 class TestBoard:
 

@@ -1,7 +1,7 @@
 
-from actions import Option
-from checker import Checker
-from board import Board
+from domain.actions import Option
+from domain.checker import Checker
+from domain.board import Board
 from controllers.cli.player_input import PlayerInput
 
 class TestPlayerInput:

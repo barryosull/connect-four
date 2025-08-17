@@ -4,10 +4,9 @@ import os
 import argparse
 
 from pathlib import Path
-from board import Board
-from checker import Checker
-from actions import Option
-
+from domain.board import Board
+from domain.checker import Checker
+from domain.actions import Option
 from controllers.cli.player_factory import PlayerFactory
 from controllers.cli.player_input import PlayerInput
 from controllers.cli.renderer import Renderer

@@ -1,10 +1,11 @@
 
-from board import Board, Move, Line, Coord
-from checker import Checker
+from domain.board import Board, Move, Line, Coord
+from domain.checker import Checker
 import random
 
 type AvailableLines = dict(Coord, list[Line])
 
+# Simple heuristic based agent that triesd to choose the best move
 class Agent:
 
     def select_next_slot(self, checker: Checker, board: Board) -> int:
@@ -12,14 +13,16 @@ class Agent:
         moves = board.find_line_making_moves(checker.value)
         other_player_moves = board.find_line_making_moves(checker.opponent().value)
 
-        for length in range (0, 3):
+        for offset in range (0, 3):
+            length = Board.WIN_LENGTH - offset
+
             # Best move for player
-            best_move = self.__find_best_move_of_length(moves, board, 4 - length, checker)
+            best_move = self.__find_best_move_of_length(moves, board, length, checker)
             if (best_move is not None):
                 return best_move[0]
 
             # Block other players winning moves
-            best_move = self.__find_best_move_of_length(other_player_moves, board, 4 - length, checker.opponent())
+            best_move = self.__find_best_move_of_length(other_player_moves, board, length, checker.opponent())
             if (best_move is not None):
                 return best_move[0]
 
@@ -37,7 +40,8 @@ class Agent:
         best_move = None
         for move, lines in moves.items():
             expanded_lines = list(filter(lambda line: len(line) == length, lines))
-            if len(expanded_lines) > lines_found and (length == 4 or not self.__would_move_let_opponent_win(move, board, checker.opponent())):
+            # Find best move, but make sure it doesnt let the other plan win immedaitely afterwards (skip for winning move)
+            if len(expanded_lines) > lines_found and (length == Board.WIN_LENGTH or not self.__would_move_let_opponent_win(move, board, checker.opponent())):
                 lines_found = len(expanded_lines) 
                 best_move = move
         return best_move

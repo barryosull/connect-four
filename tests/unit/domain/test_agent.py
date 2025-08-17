@@ -1,7 +1,7 @@
 
-from agent import Agent
-from board import Board
-from checker import Checker
+from domain.agent import Agent
+from domain.board import Board
+from domain.checker import Checker
 
 class TestAgent:
 

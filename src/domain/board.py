@@ -1,12 +1,12 @@
 
 from typing import Self
-from checker import Checker
+from domain.checker import Checker
 type BoardCells = list[list[str]]
 type Coord = tuple[int, int]
 type Line = list[Coord]
 type Move = dict[Coord, list[Line]]
 
-# Todo Move to its own file
+# Should be moved to own file
 class Winner:
 
     def __init__(self, checker: Checker, lines: list[list[Coord]]):
@@ -23,6 +23,8 @@ class Winner:
         return False
 
 class Board:
+
+    WIN_LENGTH = 4
 
     def __init__(self, cells: BoardCells|None = None):
         self.__cells = [row[:] for row in cells] if cells is not None else [
@@ -79,7 +81,7 @@ class Board:
         directional_lines = self.directional_lines(coord)
         lines_with_coord = self.filter_lines_when_checker_is_at_coord(str(checker), coord, directional_lines)
     
-        winning_lines = list(filter(lambda line: len(line) >=4 , lines_with_coord))
+        winning_lines = list(filter(lambda line: len(line) >= self.WIN_LENGTH , lines_with_coord))
         print(checker, winning_lines)
         
         # Check for winners
@@ -88,6 +90,8 @@ class Board:
 
         return Winner(checker, winning_lines)
 
+    # Bit brute force TBH, there are better algos, but it works
+    # Easy room for improvement
     def directional_lines(self, coord: Coord) -> list[Line]:
         [x, y] = coord
         horizontal_coords = [(x, y)]
@@ -166,5 +170,5 @@ class Board:
         return available
 
     def __filter_winning_lines(self, checker: Checker, lines: list[Line]) -> list[Line]:
-        return list(filter(lambda line: len(line) >=4 , lines))
+        return list(filter(lambda line: len(line) >= self.WIN_LENGTH , lines))
     

@@ -1,5 +1,5 @@
 
-from checker import Checker
+from domain.checker import Checker
 
 class TestBoard:
 

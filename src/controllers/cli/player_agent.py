@@ -1,10 +1,10 @@
 
 import time
-from actions import Action, Option
-from checker import Checker
-from board import Board
-from agent import Agent
-from actions import Action, Option
+from domain.actions import Action, Option
+from domain.checker import Checker
+from domain.board import Board
+from domain.agent import Agent
+from domain.actions import Action, Option
 from controllers.cli.player_interface import PlayerInterface
 from controllers.cli.renderer import Renderer
 
