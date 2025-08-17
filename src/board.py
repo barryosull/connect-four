@@ -2,6 +2,7 @@
 type BoardCells = list[list[str]]
 type Coord = tuple[int, int]
 type Line = list[Coord]
+from typing import Self
 
 # Todo Move to its own file
 class Winner:
@@ -10,7 +11,7 @@ class Winner:
         self.checker = checker
         self.lines = lines
 
-    def __eq__(self, other):
+    def __eq__(self, other: Self):
         return self.checker == other.checker and self.lines == other.lines
 
     def is_in_list(self, coord: Coord) -> bool:
@@ -36,19 +37,11 @@ class Board:
     #############
     
     def drop_checker(self, checker: str, slot: int) -> Coord|None:
-        coord = self.__find_free_coord(slot)
+        coord = self.find_free_coord(slot)
         if (coord is None):
             return None
         self.__cells[coord[1]][coord[0]] = checker.value
         return coord
-    
-    def __find_free_coord(self, slot: int) -> Coord|None:
-        x = slot        
-        for i in range (0, self.height()): 
-            y = self.height() - 1 - i
-            if self.__cells[y][x] == '-':
-                return [x, y]
-        return None
 
     
     #############
@@ -61,8 +54,16 @@ class Board:
     def height(self) -> int:
         return len(self.__cells)
 
+    def find_free_coord(self, slot: int) -> Coord|None:
+        x = slot        
+        for i in range (0, self.height()): 
+            y = self.height() - 1 - i
+            if self.__cells[y][x] == '-':
+                return (x, y)
+        return None
+
     def is_valid_drop(self, slot: int) -> bool: 
-        return self.__find_free_coord(slot) is not None
+        return self.find_free_coord(slot) is not None
 
     def game_can_continue(self) -> bool:
         return self.winner() is None and self.is_full == False
@@ -78,10 +79,23 @@ class Board:
         [x, y] = last_move
         checker = self.__cells[y][x]
 
-        horizontal_line = [[x, y]]
-        vertical_line = [[x, y]]
-        down_right_line = [[x, y]]
-        up_right_line = [[x, y]]
+        directional_lines = self.directional_lines(last_move)
+        lines_with_coord = self.filter_lines_when_checker_is_at_coord(checker, last_move, directional_lines)
+    
+        winning_lines = list(filter(lambda line: len(line) >=4 , lines_with_coord))
+        
+        # Check for winners
+        if len(winning_lines) == 0:
+            return None
+
+        return Winner(checker, winning_lines)
+
+    def directional_lines(self, coord: Coord) -> list[Line]:
+        [x, y] = coord
+        horizontal_coords = [(x, y)]
+        vertical_coords = [(x, y)]
+        down_right_coords = [(x, y)]
+        up_right_coords = [(x, y)]
 
         for offset in range(1, max(self.height(), self.width())):
             left_x = x - offset
@@ -91,46 +105,69 @@ class Board:
 
             # Horizontal
             if (left_x >= 0):
-                horizontal_line.insert(0, [left_x, y])
+                horizontal_coords.insert(0, (left_x, y))
             if (right_x < self.width()):
-                horizontal_line.append([right_x, y])
+                horizontal_coords.append((right_x, y))
 
             # Vertical
             if (up_y >= 0):
-                vertical_line.insert(0, [x, up_y])
+                vertical_coords.insert(0, (x, up_y))
             if (down_y < self.height()):
-                vertical_line.append([x, down_y])
+                vertical_coords.append((x, down_y))
 
             # Diagonal down right
             if left_x >= 0 and up_y >= 0:
-                down_right_line.insert(0, [left_x, up_y])
+                down_right_coords.insert(0, (left_x, up_y))
             if right_x < self.width() and down_y < self.height():
-                down_right_line.append([right_x, down_y])
+                down_right_coords.append((right_x, down_y))
 
             # Diagonal up right
             if left_x >= 0 and down_y < self.height():
-                up_right_line.insert(0, [left_x, down_y])
+                up_right_coords.insert(0, (left_x, down_y))
             if right_x < self.width() and up_y >= 0:
-                up_right_line.append([right_x, up_y])
+                up_right_coords.append((right_x, up_y))
 
-        winning_lines = self.__filter_winning_lines(checker, [horizontal_line, vertical_line, down_right_line, up_right_line])
-        
-        # Check for winners
-        if len(winning_lines) == 0:
-            return None
+        return [horizontal_coords, vertical_coords, down_right_coords, up_right_coords]
 
-        return Winner(checker, winning_lines)
+    def filter_lines_when_checker_is_at_coord(self, checker: str, desired_coord: Coord, directional_lines: list[Line]) -> list[Line]:
+        lines = []
+        for directional_line in directional_lines:
+            checker_line = []
+            
+            for coord in directional_line:
+                if coord == desired_coord or self.__cells[coord[1]][coord[0]] == checker:
+                    checker_line.append(coord)
+                elif len(checker_line) > 1 and desired_coord in checker_line:
+                    lines.append(checker_line)
+                    checker_line = []
+                else: 
+                    checker_line = []
+
+            if len(checker_line) > 1 and desired_coord in checker_line:
+                    lines.append(checker_line)
+                    checker_line = []
+
+        return lines
+
+    def find_line_making_moves(self, checker: str) -> dict[Coord, list[Line]]:
+        available_coords =  self.available_coords()
+        moves = {}
+        for coord in available_coords:
+            directional_lines = self.directional_lines(coord)
+            lines_with_coord = self.filter_lines_when_checker_is_at_coord(checker, coord, directional_lines)
+            if (len(lines_with_coord) > 0):
+                moves[coord] = lines_with_coord
+        return moves
+
+    def available_coords(self) -> list[Coord]:
+        available = []
+        for x in range(0, self.width()):
+            coord = self.find_free_coord(x)
+            if (coord is not None):
+                available.append(coord)
+        return available
+
 
     def __filter_winning_lines(self, checker: str, lines: list[Line]) -> list[Line]:
-        winning_lines = []
-        for line in lines:
-            winning_line = []
-            for pos in line:
-                if self.__cells[pos[1]][pos[0]] == checker:
-                    winning_line.append(pos)
-                else:
-                    winning_line = []
-                if len(winning_line) == 4:
-                    winning_lines.append(winning_line)
-                    break
-        return winning_lines
+        return list(filter(lambda line: len(line) >=4 , lines))
+    
