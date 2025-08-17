@@ -2,19 +2,20 @@
 from controllers.cli.player_factory import PlayerFactory
 from controllers.cli.player_input import PlayerInput
 from controllers.cli.player_set_actions import PlayerSetActions
+from controllers.cli.player_agent import PlayerAgent
 
 class TestPlayerFactory:
 
-    def test_make_input_by_default(self, mocker):
+    def test_make_input_and_agent_by_default(self, mocker):
         renderer = mocker.Mock()
         factory = PlayerFactory(renderer)
         no_cli_args = []
 
         players = factory.make_players(no_cli_args) 
 
-        input_players = list(filter(lambda player: isinstance(player, PlayerInput), players))
         assert(len(players) == 2)
-        assert(len(input_players) == 2)
+        assert(isinstance(players[0], PlayerInput))
+        assert(isinstance(players[1], PlayerAgent))
 
 
     def test_make_set_actions_from_cli_args(self, mocker):

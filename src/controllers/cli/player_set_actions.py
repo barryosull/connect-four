@@ -2,7 +2,7 @@
 from actions import Action, Option
 from checker import Checker
 from board import Board
-from player_interface import PlayerInterface
+from controllers.cli.player_interface import PlayerInterface
 
 type Actions = list[Action]
 

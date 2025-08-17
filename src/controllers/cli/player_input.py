@@ -4,7 +4,7 @@ from board import Board
 from checker import Checker
 from actions import Action, Option
 from controllers.cli.renderer import Renderer
-from player_interface import PlayerInterface
+from controllers.cli.player_interface import PlayerInterface
 
 class PlayerInput(PlayerInterface):
 
