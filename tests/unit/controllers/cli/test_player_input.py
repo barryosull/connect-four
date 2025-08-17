@@ -31,15 +31,6 @@ class TestPlayerInput:
 
         assert(actual == Option.QUIT)
 
-    def test_select_action_restart(self, mocker, monkeypatch): 
-        self.setup(mocker)
-        input_char = PlayerInput.RESTART_CHAR
-        self.override_inputs(monkeypatch, [input_char])
-
-        actual = self.player.select_action(self.board)
-
-        assert(actual == Option.RESTART)
-
     def test_select_action_asks_again_if_input_is_invalid(self, mocker, monkeypatch):
         self.setup(mocker)
         invalid_chars = ['a', 'dsfsdf', '341234', '[', '-']

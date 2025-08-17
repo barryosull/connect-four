@@ -19,6 +19,6 @@ class PlayerAgent(PlayerInterface):
 
     def select_action(self, board: Board) -> Action:
         # Pretend to think
-        self.__renderer.print_agent_thinking()
+        self.__renderer.print_agent_thinking(self.checker)
         time.sleep(2)
         return self.__agent.select_next_slot(self.checker, board)

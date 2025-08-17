@@ -9,7 +9,6 @@ from controllers.cli.player_interface import PlayerInterface
 class PlayerInput(PlayerInterface):
 
     QUIT_CHAR = 'q'
-    RESTART_CHAR = 'r'
 
     checker = ''
 
@@ -39,7 +38,7 @@ class PlayerInput(PlayerInterface):
 
         # valid chars
         slots_chars = [str(i) for i in range(1, board.width() + 1)]
-        char_options = [self.QUIT_CHAR, self.RESTART_CHAR] +  slots_chars
+        char_options = [self.QUIT_CHAR] +  slots_chars
 
         choice = ""
         while choice not in char_options:
@@ -51,13 +50,10 @@ class PlayerInput(PlayerInterface):
                 self.__renderer.print_board(board)
                 print("Please enter a valid character")
 
-            choice = input("Player '" + str(self.checker) + "', select a slot (1 - " + str(board.width()) + "), 'r' to restart, or 'q' to quit: ")
+            choice = input("Player '" + str(self.checker) + "', select a slot (1 - " + str(board.width()) + "), or 'q' to quit: ")
 
         if (choice == self.QUIT_CHAR):
             return Option.QUIT
-
-        if (choice == self.RESTART_CHAR):
-            return Option.RESTART
 
         return int(choice) - 1
 

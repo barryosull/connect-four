@@ -34,7 +34,19 @@ class TestBoard:
         assert(checker_coord is None)
 
     def test_find_winner_none(self): 
-        assert(True)
+        board = Board([
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['y', 'r', 'y', 'r', 'y', 'r', 'y'],
+            ['y', 'r', 'y', 'r', 'y', 'r', 'y']
+        ])
+        last_move_coord = (3, 4)
+        
+        actual = board.find_winner(Checker.RED, last_move_coord)
+
+        assert(actual is None)
 
     def test_find_winner_horizontal(self):
         board = Board([
@@ -45,11 +57,10 @@ class TestBoard:
             ['y', 'r', 'r', 'r', 'r', 'y', 'y'],
             ['r', 'y', 'r', 'r', 'y', 'r', 'y']
         ])
-
         last_move_coord = (3, 4)
+        
         actual = board.find_winner(Checker.RED, last_move_coord)
 
-        # Board coords
         expected = Winner(Checker.RED, [[(1, 4), (2, 4), (3, 4), (4, 4)]])
         assert(expected == actual)
 
@@ -62,11 +73,10 @@ class TestBoard:
             ['-', '-', '-', 'r', 'y', '-', 'y'],
             ['r', 'y', 'r', 'r', 'r', 'y', 'r'],
         ])
-
         last_move_coord = (3, 2)
+        
         actual = board.find_winner(Checker.RED, last_move_coord)
 
-        # Board coords
         expected = Winner(Checker.RED, [[(3, 2), (3, 3), (3, 4), (3, 5)]])
         assert(expected == actual)
 
@@ -79,11 +89,10 @@ class TestBoard:
             ['y', 'r', 'y', 'r', 'y', 'r', 'y'],
             ['r', 'y', 'r', 'y', 'r', 'y', 'r']
         ]) 
-
         last_move_coord = [1, 2]
+        
         actual = board.find_winner(Checker.RED, last_move_coord)
 
-        # Board coords
         expected = Winner(Checker.RED, [[(1, 2), (2, 3), (3, 4), (4, 5)]])
         assert(expected == actual)
 
@@ -96,11 +105,10 @@ class TestBoard:
             ['y', 'r', 'y', 'r', 'y', 'r', 'y'],
             ['r', 'y', 'r', 'y', 'r', 'y', 'r']
         ]) 
-
         last_move_coord = (3, 2)
+        
         actual = board.find_winner(Checker.RED, last_move_coord)
 
-        # Board coords
         expected = Winner(Checker.RED, [[(0, 5), (1, 4), (2, 3), (3, 2)]])
         assert(expected == actual)
 
@@ -113,11 +121,10 @@ class TestBoard:
             ['-', 'r', 'y', 'r', 'y', 'r', '-'],
             ['r', 'y', 'y', 'r', 'y', 'y', 'r']
         ]) 
-
         last_move_coord = (3, 2)
+        
         actual = board.find_winner(Checker.RED, last_move_coord)
 
-        # Board coords
         expected = Winner(Checker.RED, [
             [(3, 2), (3, 3), (3, 4), (3, 5)], # Center down
             [(3, 2), (4, 3), (5, 4), (6, 5)], # Center diagonal down 
@@ -192,6 +199,5 @@ class TestBoard:
                 [(4, 5), (5, 4)]
             ],
         }
-    
         assert(actual == expected)
 

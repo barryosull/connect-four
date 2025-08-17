@@ -66,8 +66,8 @@ class Renderer:
         title = file_path.read_text()
         print(title)
 
-    def print_agent_thinking(self):
-        print("The agent is thinking . . .")
+    def print_agent_thinking(self, checker: Checker):
+        print(f"Player '{checker}' is thinking . . .")
 
     def print_winner(self, checker: Checker): 
         print(f"The winner is '{checker}'")
