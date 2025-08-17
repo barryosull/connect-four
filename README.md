@@ -33,8 +33,10 @@ To run enter `pytest` in the container.
 I went with simple domain and controller separation, with a ports and adapters mindset. Domain is the core concepts excluding input or output mechansims. The controllers handle inputs and outputs and drive the domain logic, in this case a CLI controller. The design is intended to make other types of controllers easy to implement, such as a HTTP API.
 
 ## Improvements
-If I had more time I'd introduce an application layer, specifically a service called `GameService` that would remove some of the business logic from the controller (such as selecting the next player). This would also make introducing a new controller type even easier.
+If I had more time I'd introduce an application layer, specifically a service called `GameService` that would remove some of the business logic from the controller (such as selecting the next player). This would also make introducing a new controller type even easier and make unit testing controllers more viable.
 
 I'd extract the board searching logic from the board and move that into another class, as that class is getting quite big and the search logic is its own thing.
+
+I've left the agent concept lose and decoupled. It would be very easy to create different types of agent, which are composed of layered strategies. E.g. you could make "sore loser" agent that quits once it's realised you're going to win after its move no matter what.
 
 Finally I'd introduce a repository for saving in progress games. It would be nice to be able to quit and continue a game.
