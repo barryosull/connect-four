@@ -37,7 +37,6 @@ class TestAgent:
         expected = 1
         assert(slot == expected)
 
-
     def test_select_next_slot_expands_existing_lines(self):
         board = Board([
             ['-', '-', '-', '-', '-', '-', '-'],
@@ -51,6 +50,22 @@ class TestAgent:
 
         slot = agent.select_next_slot(Checker.RED, board)
 
+        expected = 2
+        assert(slot == expected)
+
+    def test_select_next_slot_only_expands_existing_lines_when_not_a_win_for_other_player(self):
+        # If 'y' selects slot 2 then 'r' wins on the next turn
+        board = Board([
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['-', '-', '-', 'r', 'y', '-', '-'],
+            ['-', '-', 'y', 'y', 'r', '-', '-'],
+            ['r', 'r', 'y', 'r', 'y', 'r', '-']
+        ])
+        agent = Agent()
+
+        slot = agent.select_next_slot(Checker.YELLOW, board)
         expected = 2
         assert(slot == expected)
 

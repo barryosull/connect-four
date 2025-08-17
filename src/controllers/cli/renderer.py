@@ -63,6 +63,7 @@ class Renderer:
         # Todo: Fix relative path, not sure of the python way to do this yet
         file_path = Path("src/controllers/cli//title.txt")
         title = file_path.read_text()
+        print(title)
 
     def print_winner(self, checker: str): 
         print()

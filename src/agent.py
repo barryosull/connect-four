@@ -29,7 +29,7 @@ class Agent:
         best_slot = None
         for coord, lines in moves.items():
             expanded_lines = list(filter(lambda line: len(line) == 3, lines))
-            if len(expanded_lines) > lines_found:
+            if len(expanded_lines) > lines_found and not self.__would_move_let_opponent_win_game(coord, board, checker):
                 lines_found = len(expanded_lines) 
                 best_slot = coord[0]
         if best_slot is not None:
@@ -51,7 +51,7 @@ class Agent:
         best_slot = None
         for coord, lines in moves.items():
             expanded_lines = list(filter(lambda line: len(line) == 2, lines))
-            if len(expanded_lines) > lines_found:
+            if len(expanded_lines) > lines_found and not self.__would_move_let_opponent_win_game(coord, board, checker):
                 lines_found = len(expanded_lines) 
                 best_slot = coord[0]
         if best_slot is not None:
@@ -77,5 +77,9 @@ class Agent:
         # Select random by default
         return random.choice(available.keys)[0]
 
-
-
+    def __would_move_let_opponent_win_game(self, move: Coord, board: Board, checker: Checker) -> bool:
+        return False
+        if move[1] == 0:
+            return False
+        move_above = (move[0], move[1] - 1)
+        return board.find_winner(move_above) is not None
