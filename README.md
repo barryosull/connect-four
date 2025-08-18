@@ -1,4 +1,4 @@
-# Simple connect four CI APP
+# Simple connect four CLI APP
 
 Simple python app for playing connect four in the CLI.
 
