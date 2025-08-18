@@ -14,7 +14,7 @@ This has been built in Python 3.13.6 and runs in a docker container.
 You can launch by calling the following in the installed directory:
 
 Build the docker image:
-> docker build -t connect_four
+> docker build -t connect_four .
 
 Start the container, download deps and connect
 > docker run -v .:/app -it connect_four
