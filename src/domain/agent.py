@@ -26,7 +26,7 @@ class Agent:
             if (best_move is not None):
                 return best_move[0]
 
-        # Select middle if available
+        # Select middle if available, as it's the best position if there are no others
         available = board.available_coords()
         middle = (board.width() // 2, board.height() - 1)
         if middle in available:
