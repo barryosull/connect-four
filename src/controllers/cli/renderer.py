@@ -5,6 +5,7 @@ from pathlib import Path
 from domain.board import Board, Winner
 from domain.checker import Checker
 
+# Renders to the console
 class Renderer:
 
     def print_board(self, board: Board, winner: Winner|None = None):
@@ -76,6 +77,5 @@ class Renderer:
         print("Board is full, no more moves left")
 
     def print_goodbye(self):
-        print()
         print("Thanks for playing!")
         print()

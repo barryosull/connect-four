@@ -21,8 +21,8 @@ class Agent:
             if (best_move is not None):
                 return best_move[0]
 
-            # Block other players winning moves
-            best_move = self.__find_best_move_of_length(other_player_moves, board, length, checker.opponent())
+            # Block other players moves, but only potential rows of 3 or above
+            best_move = None if length == 2 else self.__find_best_move_of_length(other_player_moves, board, length, checker.opponent())
             if (best_move is not None):
                 return best_move[0]
 

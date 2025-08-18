@@ -11,7 +11,7 @@ from controllers.cli.player_factory import PlayerFactory
 from controllers.cli.player_input import PlayerInput
 from controllers.cli.renderer import Renderer
 
-class CLIGame:
+class Game:
 
     def __init__(self, renderer: Renderer = None, player_factory: PlayerFactory = None):
         self.__renderer = render if (renderer is not None) else Renderer()

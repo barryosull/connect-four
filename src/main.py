@@ -1,9 +1,9 @@
 
-from controllers.cli.cli_game import CLIGame
+from controllers.cli.game import Game
 import sys
 
 def main():
-    cli_game = CLIGame()
+    cli_game = Game()
     cli_game.play()
 
 main()
