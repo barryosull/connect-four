@@ -16,10 +16,10 @@ class TestAgent:
         ])
         agent = Agent()
 
-        slot = agent.select_next_slot(Checker.RED, board)
+        actual = agent.select_next_slot(Checker.RED, board)
 
         expected = 1
-        assert(slot == expected)
+        assert(actual == expected)
 
     def select_next_slot_stop_other_player_from_winning(self):
         board = Board([
@@ -32,10 +32,10 @@ class TestAgent:
         ])
         agent = Agent()
 
-        slot = agent.select_next_slot(Checker.YELLOW, board)
+        actual = agent.select_next_slot(Checker.YELLOW, board)
 
         expected = 1
-        assert(slot == expected)
+        assert(sactuallot == expected)
 
     def test_select_next_slot_expands_existing_lines(self):
         board = Board([
@@ -48,10 +48,10 @@ class TestAgent:
         ])
         agent = Agent()
 
-        slot = agent.select_next_slot(Checker.RED, board)
+        actual = agent.select_next_slot(Checker.RED, board)
 
         expected = 2
-        assert(slot == expected)
+        assert(actual == expected)
 
     def test_select_next_slot_only_expands_existing_lines_when_not_a_win_for_other_player(self):
         # If 'y' selects slot 2 (gets two rows of three) then 'r' wins on the next turn, slot 1 is a better choice
@@ -65,9 +65,10 @@ class TestAgent:
         ])
         agent = Agent()
 
-        slot = agent.select_next_slot(Checker.YELLOW, board)
+        actual = agent.select_next_slot(Checker.YELLOW, board)
+
         expected = 1
-        assert(slot == expected)
+        assert(actual == expected)
 
     def test_select_next_slot_expands_multiple_existing_lines_if_possible(self):
         board = Board([
@@ -80,10 +81,10 @@ class TestAgent:
         ])
         agent = Agent()
 
-        slot = agent.select_next_slot(Checker.RED, board)
+        actual = agent.select_next_slot(Checker.RED, board)
 
         expected = 4
-        assert(slot == expected)
+        assert(actual == expected)
 
     def test_select_next_slot_blocks_other_player_across_multiple_existing_lines_if_possible(self):
         board = Board([
@@ -96,10 +97,10 @@ class TestAgent:
         ])
         agent = Agent()
 
-        slot = agent.select_next_slot(Checker.YELLOW, board)
+        actual = agent.select_next_slot(Checker.YELLOW, board)
 
         expected = 4
-        assert(slot == expected)
+        assert(actual == expected)
 
     def test_select_next_slot_chooses_middle_as_opening_move(self):
         board = Board([
@@ -112,9 +113,25 @@ class TestAgent:
         ])
         agent = Agent()
 
-        slot = agent.select_next_slot(Checker.RED, board)
+        actual = agent.select_next_slot(Checker.RED, board)
 
         expected = 3
-        assert(slot == expected)
+        assert(actual == expected)
+
+    def test_select_next_slot_chooses_random_if_middle_is_taken(self):
+        board = Board([
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['-', '-', '-', '-', '-', '-', '-'],
+            ['-', '-', '-', 'y', '-', '-', '-'],
+        ])
+        agent = Agent()
+
+        actual = agent.select_next_slot(Checker.RED, board)
+
+        unexpected = 3
+        assert(actual != unexpected)
 
 

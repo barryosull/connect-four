@@ -33,7 +33,7 @@ class Agent:
             return middle[0]
 
         # Select random by default, not optimal, but it makes the game more interesting
-        return random.choice(available.keys)[0]
+        return random.choice(available)[0]
 
     def __find_best_move_of_length(self, moves: list[Move], board: Board, length: int, checker: Checker) -> Coord|None:
         lines_found = 0
