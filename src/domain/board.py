@@ -4,7 +4,7 @@ from domain.checker import Checker
 type BoardCells = list[list[str]]
 type Coord = tuple[int, int]
 type Line = list[Coord]
-type Move = dict[Coord, list[Line]]
+type Moves = dict[Coord, list[Line]]
 
 # Should be moved to own file
 class Winner:
@@ -78,11 +78,9 @@ class Board:
     def find_winner(self, checker: Checker, coord: Coord) -> Winner|None:
         [x, y] = coord
 
-        directional_lines = self.directional_lines(coord)
-        lines_with_coord = self.filter_lines_when_checker_is_at_coord(str(checker), coord, directional_lines)
+        lines_with_coord = self.find_lines_with_coord(checker, coord)
     
         winning_lines = list(filter(lambda line: len(line) >= self.WIN_LENGTH , lines_with_coord))
-        print(checker, winning_lines)
         
         # Check for winners
         if len(winning_lines) == 0:
@@ -90,73 +88,41 @@ class Board:
 
         return Winner(checker, winning_lines)
 
-    # Bit brute force TBH, there are better algos, but it works
-    # Easy room for improvement
-    def directional_lines(self, coord: Coord) -> list[Line]:
-        [x, y] = coord
-        horizontal_coords = [(x, y)]
-        vertical_coords = [(x, y)]
-        down_right_coords = [(x, y)]
-        up_right_coords = [(x, y)]
-
-        for offset in range(1, max(self.height(), self.width())):
-            left_x = x - offset
-            right_x = x + offset
-            up_y = y - offset
-            down_y = y + offset
-
-            # Horizontal
-            if (left_x >= 0):
-                horizontal_coords.insert(0, (left_x, y))
-            if (right_x < self.width()):
-                horizontal_coords.append((right_x, y))
-
-            # Vertical
-            if (up_y >= 0):
-                vertical_coords.insert(0, (x, up_y))
-            if (down_y < self.height()):
-                vertical_coords.append((x, down_y))
-
-            # Diagonal down right
-            if left_x >= 0 and up_y >= 0:
-                down_right_coords.insert(0, (left_x, up_y))
-            if right_x < self.width() and down_y < self.height():
-                down_right_coords.append((right_x, down_y))
-
-            # Diagonal up right
-            if left_x >= 0 and down_y < self.height():
-                up_right_coords.insert(0, (left_x, down_y))
-            if right_x < self.width() and up_y >= 0:
-                up_right_coords.append((right_x, up_y))
-
-        return [horizontal_coords, vertical_coords, down_right_coords, up_right_coords]
-
-    def filter_lines_when_checker_is_at_coord(self, checker: Checker, desired_coord: Coord, directional_lines: list[Line]) -> list[Line]:
+    # Search all lines expanding outward from the coord
+    def find_lines_with_coord(self, checker: Checker, coord: Coord) -> list[Line]:
         lines = []
-        for directional_line in directional_lines:
-            checker_line = []
-            
-            for coord in directional_line:
-                if coord == desired_coord or self.__cells[coord[1]][coord[0]] == checker:
-                    checker_line.append(coord)
-                elif len(checker_line) > 1 and desired_coord in checker_line:
-                    lines.append(checker_line)
-                    checker_line = []
-                else: 
-                    checker_line = []
+        # up, up right, right, down right
+        directions = [(0, 1), (1, 1), (1, 0), (1, -1)]
+        for direction in directions:
+            line = [coord]
 
-            if len(checker_line) > 1 and desired_coord in checker_line:
-                    lines.append(checker_line)
-                    checker_line = []
+            # Go "left"
+            offset = coord
+            offset = (offset[0] - direction[0], offset[1] - direction[1])
+            while (0 <= offset[0] < self.width() and 0 <= offset[1] < self.height()):
+                if self.__cells[offset[1]][offset[0]] != checker.value:
+                    break
+                line.insert(0, offset)
+                offset = (offset[0] - direction[0], offset[1] - direction[1])
 
+            # Go "right"
+            offset = coord
+            offset = (offset[0] + direction[0], offset[1] + direction[1])
+            while (0 <= offset[0] < self.width() and 0 <= offset[1] < self.height()):
+                if self.__cells[offset[1]][offset[0]] != checker.value:
+                    break
+                line.append(offset)
+                offset = (offset[0] + direction[0], offset[1] + direction[1])
+
+            if (len(line) > 1):
+                lines.append(line)
         return lines
 
-    def find_line_making_moves(self, checker: Checker) -> Move:
+    def find_line_making_moves(self, checker: Checker) -> Moves:
         available_coords =  self.available_coords()
         moves = {}
         for coord in available_coords:
-            directional_lines = self.directional_lines(coord)
-            lines_with_coord = self.filter_lines_when_checker_is_at_coord(checker, coord, directional_lines)
+            lines_with_coord = self.find_lines_with_coord(checker, coord)
             if (len(lines_with_coord) > 0):
                 moves[coord] = lines_with_coord
         return moves

@@ -1,5 +1,5 @@
 
-from domain.board import Board, Move, Line, Coord
+from domain.board import Board, Moves, Line, Coord
 from domain.checker import Checker
 import random
 
@@ -10,8 +10,8 @@ class Agent:
 
     def select_next_slot(self, checker: Checker, board: Board) -> int:
         
-        moves = board.find_line_making_moves(checker.value)
-        other_player_moves = board.find_line_making_moves(checker.opponent().value)
+        moves = board.find_line_making_moves(checker)
+        other_player_moves = board.find_line_making_moves(checker.opponent())
 
         for offset in range (0, 3):
             length = Board.WIN_LENGTH - offset
@@ -35,7 +35,7 @@ class Agent:
         # Select random by default, not optimal, but it makes the game more interesting
         return random.choice(available)[0]
 
-    def __find_best_move_of_length(self, moves: list[Move], board: Board, length: int, checker: Checker) -> Coord|None:
+    def __find_best_move_of_length(self, moves: Moves, board: Board, length: int, checker: Checker) -> Coord|None:
         lines_found = 0
         best_move = None
         for move, lines in moves.items():

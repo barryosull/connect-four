@@ -62,6 +62,7 @@ class TestBoard:
         actual = board.find_winner(Checker.RED, last_move_coord)
 
         expected = Winner(Checker.RED, [[(1, 4), (2, 4), (3, 4), (4, 4)]])
+        print(actual.lines, expected.lines)
         assert(expected == actual)
 
     def test_find_winner_vertical(self): 
@@ -180,7 +181,7 @@ class TestBoard:
             ['-', 'y', 'r', '-', 'r', 'y', '-'],
         ])
 
-        actual = board.find_line_making_moves('r')
+        actual = board.find_line_making_moves(Checker.RED)
 
         expected = {
             (1, 4) : [
