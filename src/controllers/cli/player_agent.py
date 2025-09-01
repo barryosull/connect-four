@@ -1,10 +1,8 @@
-
 import time
-from domain.actions import Action, Option
+from domain.actions import Action
 from domain.checker import Checker
 from domain.board import Board
 from domain.agent import Agent
-from domain.actions import Action, Option
 from controllers.cli.player_interface import PlayerInterface
 from controllers.cli.renderer import Renderer
 
@@ -14,13 +12,8 @@ type Actions = list[Action]
 
 
 class PlayerAgent(PlayerInterface):
-
     def __init__(
-        self,
-        checker: Checker,
-        agent: Agent,
-        renderer: Renderer,
-        sleep_time: int = 2
+        self, checker: Checker, agent: Agent, renderer: Renderer, sleep_time: int = 2
     ):
         self.checker = checker
         self.__agent = agent

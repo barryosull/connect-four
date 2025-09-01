@@ -1,4 +1,3 @@
-
 from domain.actions import Action, Option
 from domain.checker import Checker
 from domain.board import Board
@@ -12,7 +11,6 @@ type Actions = list[Action]
 
 
 class PlayerSetInput(PlayerInterface):
-
     def __init__(self, checker: Checker, actions: Actions):
         self.__actions = actions.copy()
         self.checker = checker

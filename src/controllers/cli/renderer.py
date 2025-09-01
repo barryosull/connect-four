@@ -1,6 +1,4 @@
-
 import os
-import sys
 from pathlib import Path
 from domain.board import Board, Winner
 from domain.checker import Checker
@@ -9,21 +7,16 @@ from domain.checker import Checker
 
 
 class Renderer:
-
     def print_board(self, board: Board, winner: Winner | None = None):
-
         cells = board.export_cells()
 
         # Cell colours
-        char_to_colour = {
-            "r": 31,
-            "y": 33
-        }
+        char_to_colour = {"r": 31, "y": 33}
 
         padding = "     "
 
         # Clear the termninal
-        os.system('clear')
+        os.system("clear")
 
         self.__print_title()
 
@@ -39,12 +32,11 @@ class Renderer:
         for y, row in enumerate(cells):
             line = f"{padding}|"
             for x, cell in enumerate(row):
-
                 # Bold and color
                 color = char_to_colour.get(cell, 38)
                 bg_color = 47 if winner and winner.is_in_list((x, y)) else 40
-                weight = 1 if cell != '-' else 0
-                cell_char = cell if cell != '-' else '-'
+                weight = 1 if cell != "-" else 0
+                cell_char = cell if cell != "-" else "-"
 
                 format = f"{weight};{color};{bg_color}"
                 line += f" \033[{format}m{cell_char}\033[0m"
@@ -52,11 +44,11 @@ class Renderer:
             lines += f"{line}\n"
 
         # bottom
-        lines += f"{padding}{("=" * ((col_count * 2) + 3))}\n"
+        lines += f"{padding}{('=' * ((col_count * 2) + 3))}\n"
 
         print(lines)
 
-        if (winner is not None):
+        if winner is not None:
             self.print_winner(winner.checker)
             return
 

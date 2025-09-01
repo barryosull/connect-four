@@ -1,4 +1,3 @@
-
 import sys
 import argparse
 from domain.checker import Checker
@@ -11,31 +10,16 @@ from controllers.cli.renderer import Renderer
 
 
 class PlayerFactory:
-
     def __init__(self, renderer: Renderer):
         self.__renderer = renderer
 
-    def make_players(
-        self,
-        cli_args: list[str] = sys.argv[1:]
-    ) -> list[PlayerInterface]:
+    def make_players(self, cli_args: list[str] = sys.argv[1:]) -> list[PlayerInterface]:
         parser = argparse.ArgumentParser(
-            prog='Connect Four',
-            description='Play a game of connect four'
+            prog="Connect Four", description="Play a game of connect four"
         )
 
-        parser.add_argument(
-            '-p1',
-            '--player1Actions',
-            nargs="*",
-            type=str
-        )
-        parser.add_argument(
-            '-p2',
-            '--player2Actions',
-            nargs="*",
-            type=str
-        )
+        parser.add_argument("-p1", "--player1Actions", nargs="*", type=str)
+        parser.add_argument("-p2", "--player2Actions", nargs="*", type=str)
 
         parsed_args = parser.parse_args(cli_args)
 
@@ -45,9 +29,9 @@ class PlayerFactory:
         return [player1, player2]
 
     def make_player(self, checker: Checker, player_actions: Actions):
-        if (player_actions is not None):
+        if player_actions is not None:
             return PlayerSetInput(checker, player_actions)
-        if (checker == Checker.YELLOW):
+        if checker == Checker.YELLOW:
             return PlayerAgent(checker, Agent(), self.__renderer)
 
         return PlayerInput(checker, self.__renderer)

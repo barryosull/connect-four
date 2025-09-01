@@ -1,6 +1,4 @@
-
 from controllers.cli.game import Game
-import sys
 
 
 def main():
