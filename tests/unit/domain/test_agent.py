@@ -38,7 +38,7 @@ class TestAgent:
         actual = agent.select_next_slot(Checker.YELLOW, board)
 
         expected = 1
-        assert sactuallot == expected
+        assert actual == expected
 
     def test_select_next_slot_expands_existing_lines(self):
         board = Board(

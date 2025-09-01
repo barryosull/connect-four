@@ -103,7 +103,7 @@ class TestBoard:
         expected = Winner(Checker.RED, [[(1, 2), (2, 3), (3, 4), (4, 5)]])
         assert expected == actual
 
-    def test_find_winner_diagonally_down(self):
+    def test_find_winner_diagonally_up(self):
         board = Board(
             [
                 ["-", "-", "-", "-", "-", "-", "-"],
@@ -169,9 +169,9 @@ class TestBoard:
             ]
         )
 
-        assert empty_board.is_full() == False
-        assert nearly_full_board.is_full() == False
-        assert full_board.is_full() == True
+        assert not empty_board.is_full()
+        assert not nearly_full_board.is_full()
+        assert full_board.is_full()
 
     def test_available_coords(self):
         board = Board(

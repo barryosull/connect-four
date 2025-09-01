@@ -16,7 +16,6 @@ class PlayerInput(PlayerInterface):
         self.__renderer = renderer
 
     def select_action(self, board: Board) -> Action:
-        is_slot_full = False
         action = self.__ask_for_valid_input(board)
 
         if isinstance(action, Option):

@@ -40,16 +40,15 @@ class TestPlayerInput:
 
         assert actual == Option.QUIT
 
-    def select_actions_asks_again_if_slot_is_full(self, mocker, monkeypatch):
+    def test_select_actions_asks_again_if_slot_is_full(self, mocker, monkeypatch):
         self.setup(mocker)
         full_slot = 2
-        full_slot_input = "3"
         empty_slot = 0
         empty_slot_input = "1"
         board = self.make_board_with_full_slot(full_slot)
 
-        inputs = [full_input_slot, empty_slot_input]
-        self.override_inputs(monkeypatch, invalid_chars + [valid_char])
+        inputs = [full_slot, empty_slot_input]
+        self.override_inputs(monkeypatch, inputs)
 
         actual = self.player.select_action(board)
 
@@ -62,5 +61,5 @@ class TestPlayerInput:
     def make_board_with_full_slot(self, slot: int) -> Board:
         board = Board()
         for i in range(0, board.height()):
-            board.drop_checker(checker.RED, slot)
+            board.drop_checker(Checker.RED, slot)
         return board
