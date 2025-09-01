@@ -19,7 +19,7 @@ class Game:
         renderer: Renderer = None,
         player_factory: PlayerFactory = None
     ):
-        self.__renderer = render if (renderer is not None) else Renderer()
+        self.__renderer = renderer if (renderer is not None) else Renderer()
         self.__player_factory = player_factory if (
             player_factory is not None) else PlayerFactory(self.__renderer)
 

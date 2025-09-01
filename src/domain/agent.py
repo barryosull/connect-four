@@ -3,11 +3,8 @@ from domain.board import Board, Move, Line, Coord
 from domain.checker import Checker
 import random
 
-type AvailableLines = dict(Coord, list[Line])
 
 # Simple heuristic based agent that triesd to choose the best move
-
-
 class Agent:
 
     def select_next_slot(self, checker: Checker, board: Board) -> int:

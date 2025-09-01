@@ -12,4 +12,4 @@ class PlayerInterface(ABC):
     @abstractmethod
     def select_action(self, board: Board) -> Action:
         print("Abstract method, please implement")
-        return Option.QUIT
+        return Action.QUIT
