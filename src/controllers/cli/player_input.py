@@ -7,6 +7,8 @@ from controllers.cli.renderer import Renderer
 from controllers.cli.player_interface import PlayerInterface
 
 # Player that takes input from the CLI
+
+
 class PlayerInput(PlayerInterface):
 
     QUIT_CHAR = 'q'
@@ -21,13 +23,13 @@ class PlayerInput(PlayerInterface):
 
         is_slot_full = False
         action = self.__ask_for_valid_input(board)
-        
+
         if isinstance(action, Option):
             return action
 
         while not board.is_valid_drop(action):
 
-            action = self.__ask_for_valid_input(board, is_slot_full = True)
+            action = self.__ask_for_valid_input(board, is_slot_full=True)
             self.__renderer.print_board(board)
 
             if isinstance(action, Option):
@@ -35,11 +37,15 @@ class PlayerInput(PlayerInterface):
 
         return action
 
-    def __ask_for_valid_input(self, board: Board, is_slot_full: bool = False) -> Action:
+    def __ask_for_valid_input(
+        self,
+        board: Board,
+        is_slot_full: bool = False
+    ) -> Action:
 
         # valid chars
         slots_chars = [str(i) for i in range(1, board.width() + 1)]
-        char_options = [self.QUIT_CHAR] +  slots_chars
+        char_options = [self.QUIT_CHAR] + slots_chars
 
         choice = ""
         while choice not in char_options:
@@ -47,14 +53,16 @@ class PlayerInput(PlayerInterface):
                 self.__renderer.print_board(board)
                 print(f"Slot is full, please select another slot")
                 is_slot_full = False
-            elif (choice != ''): 
+            elif (choice != ''):
                 self.__renderer.print_board(board)
                 print("Please enter a valid character")
 
-            choice = input("Player '" + str(self.checker) + "', select a slot (1 - " + str(board.width()) + "), or 'q' to quit: ")
+            choice = input(
+                f"Player '{str(self.checker)}', " +
+                f"select a slot (1 - {str(board.width())}), or 'q' to quit: "
+            )
 
         if (choice == self.QUIT_CHAR):
             return Option.QUIT
 
         return int(choice) - 1
-

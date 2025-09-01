@@ -9,11 +9,13 @@ type Actions = list[Action]
 
 # Player with hard coded inputs, as if they entered them via the cli
 # Used in testing
+
+
 class PlayerSetInput(PlayerInterface):
 
     def __init__(self, checker: Checker, actions: Actions):
         self.__actions = actions.copy()
-        self.checker = checker 
+        self.checker = checker
 
     def select_action(self, board: Board) -> Action:
         if len(self.__actions) == 0:

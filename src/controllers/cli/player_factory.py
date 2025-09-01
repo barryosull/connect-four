@@ -9,25 +9,29 @@ from controllers.cli.player_agent import PlayerAgent
 from controllers.cli.player_set_input import PlayerSetInput, Actions
 from controllers.cli.renderer import Renderer
 
+
 class PlayerFactory:
 
     def __init__(self, renderer: Renderer):
         self.__renderer = renderer
 
-    def make_players(self, cli_args: list[str] = sys.argv[1:]) -> list[PlayerInterface]:
+    def make_players(
+        self,
+        cli_args: list[str] = sys.argv[1:]
+    ) -> list[PlayerInterface]:
         parser = argparse.ArgumentParser(
             prog='Connect Four',
             description='Play a game of connect four'
         )
 
         parser.add_argument(
-            '-p1', 
+            '-p1',
             '--player1Actions',
             nargs="*",
             type=str
         )
         parser.add_argument(
-            '-p2', 
+            '-p2',
             '--player2Actions',
             nargs="*",
             type=str
@@ -47,4 +51,3 @@ class PlayerFactory:
             return PlayerAgent(checker, Agent(), self.__renderer)
 
         return PlayerInput(checker, self.__renderer)
-        

@@ -6,9 +6,11 @@ from domain.board import Board, Winner
 from domain.checker import Checker
 
 # Renders to the console
+
+
 class Renderer:
 
-    def print_board(self, board: Board, winner: Winner|None = None):
+    def print_board(self, board: Board, winner: Winner | None = None):
 
         cells = board.export_cells()
 
@@ -19,7 +21,7 @@ class Renderer:
         }
 
         padding = "     "
-        
+
         # Clear the termninal
         os.system('clear')
 
@@ -70,7 +72,7 @@ class Renderer:
     def print_agent_thinking(self, checker: Checker):
         print(f"Player '{checker}' is thinking . . .")
 
-    def print_winner(self, checker: Checker): 
+    def print_winner(self, checker: Checker):
         print(f"The winner is '{checker}'")
 
     def print_board_is_full(self):

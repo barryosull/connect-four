@@ -2,9 +2,10 @@
 from enum import Enum
 from typing import Self
 
+
 class Checker(Enum):
-    RED    = 'r'
-    YELLOW    = 'y'
+    RED = 'r'
+    YELLOW = 'y'
 
     def __str__(self):
         return self.value

@@ -11,10 +11,18 @@ from controllers.cli.renderer import Renderer
 type Actions = list[Action]
 
 # Player that is controlled by a basic agent
+
+
 class PlayerAgent(PlayerInterface):
 
-    def __init__(self, checker: Checker, agent: Agent, renderer: Renderer, sleep_time: int = 2):
-        self.checker = checker 
+    def __init__(
+        self,
+        checker: Checker,
+        agent: Agent,
+        renderer: Renderer,
+        sleep_time: int = 2
+    ):
+        self.checker = checker
         self.__agent = agent
         self.__renderer = renderer
         self.__sleep_time = sleep_time
