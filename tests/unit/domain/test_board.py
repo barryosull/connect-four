@@ -96,11 +96,12 @@ class TestBoard:
                 ["r", "y", "r", "y", "r", "y", "r"],
             ]
         )
-        last_move_coord = [1, 2]
+        last_move_coord = (1, 2)
 
         actual = board.find_winner(Checker.RED, last_move_coord)
 
         expected = Winner(Checker.RED, [[(1, 2), (2, 3), (3, 4), (4, 5)]])
+        print(actual)
         assert expected == actual
 
     def test_find_winner_diagonally_up(self):
@@ -202,7 +203,7 @@ class TestBoard:
             ]
         )
 
-        actual = board.find_line_making_moves("r")
+        actual = board.find_line_making_moves(Checker.RED)
 
         expected = {
             (1, 4): [

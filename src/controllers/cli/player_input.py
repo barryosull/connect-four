@@ -7,9 +7,8 @@ from controllers.cli.player_interface import PlayerInterface
 
 # Player that takes input from the CLI
 class PlayerInput(PlayerInterface):
+    
     QUIT_CHAR = "q"
-
-    checker = ""
 
     def __init__(self, checker: Checker, renderer: Renderer):
         self.checker = checker

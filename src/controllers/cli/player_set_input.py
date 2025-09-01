@@ -11,14 +11,18 @@ type Actions = list[Action]
 
 
 class PlayerSetInput(PlayerInterface):
-    def __init__(self, checker: Checker, actions: Actions):
-        self.__actions = actions.copy()
+    def __init__(self, checker: Checker, input: list[str]):
+        self.__input = input.copy()
         self.checker = checker
 
     def select_action(self, board: Board) -> Action:
-        if len(self.__actions) == 0:
+        if len(self.__input) == 0:
             return Option.QUIT
-        action = self.__actions.pop(0)
+        action = self.__input.pop(0)
         if action == PlayerInput.QUIT_CHAR:
             return Option.QUIT
-        return int(action) - 1
+        if action.isdigit():
+            return int(action) - 1
+        return Option.QUIT
+
+

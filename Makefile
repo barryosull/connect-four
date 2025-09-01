@@ -4,3 +4,7 @@ boot_container:
 
 init:
 	pip install -r requirements.txt
+
+lint:
+	
+	ruff check

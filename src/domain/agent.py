@@ -1,4 +1,4 @@
-from domain.board import Board, Move, Coord
+from domain.board import Board, Moves, Coord
 from domain.checker import Checker
 import random
 
@@ -6,8 +6,8 @@ import random
 # Simple heuristic based agent that triesd to choose the best move
 class Agent:
     def select_next_slot(self, checker: Checker, board: Board) -> int:
-        moves = board.find_line_making_moves(checker.value)
-        other_player_moves = board.find_line_making_moves(checker.opponent().value)
+        moves = board.find_line_making_moves(checker)
+        other_player_moves = board.find_line_making_moves(checker.opponent())
 
         for offset in range(0, 3):
             length = Board.WIN_LENGTH - offset
@@ -38,7 +38,7 @@ class Agent:
         return random.choice(available)[0]
 
     def __find_best_move_of_length(
-        self, moves: list[Move], board: Board, length: int, checker: Checker
+        self, moves: Moves, board: Board, length: int, checker: Checker
     ) -> Coord | None:
         lines_found = 0
         best_move = None

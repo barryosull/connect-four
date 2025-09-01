@@ -1,12 +1,16 @@
 
 from domain.board import Board
-from domain.actions import Option
+from domain.actions import Action, Option
 from controllers.cli.player_factory import PlayerFactory
 from controllers.cli.renderer import Renderer
 
 
 class Game:
-    def __init__(self, renderer: Renderer = None, player_factory: PlayerFactory = None):
+    def __init__(
+        self,
+        renderer: Renderer = Renderer(),
+        player_factory: PlayerFactory | None = None
+    ):
         self.__renderer = renderer if (renderer is not None) else Renderer()
         self.__player_factory = (
             player_factory
@@ -20,7 +24,7 @@ class Game:
         players = self.__player_factory.make_players()
         player = players[0]
 
-        choice = ""
+        choice: Action
         winner = None
 
         while winner is None and not board.is_full():
@@ -34,7 +38,7 @@ class Game:
             slot = int(choice)
 
             coord = board.drop_checker(player.checker, slot)
-            winner = board.find_winner(player.checker, coord)
+            winner = board.find_winner(player.checker, coord) if coord is not None else None
 
             # Next player
             player = players[0] if player == players[1] else players[1]
