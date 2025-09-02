@@ -5,6 +5,11 @@ import random
 
 # Simple heuristic based agent that triesd to choose the best move
 class Agent:
+
+    def __init__(self, random: random = random):
+        self.__random = random
+
+
     def select_next_slot(self, checker: Checker, board: Board) -> int:
         moves = board.find_line_making_moves(checker)
         other_player_moves = board.find_line_making_moves(checker.opponent())
@@ -35,7 +40,7 @@ class Agent:
 
         # Select random by default, not optimal, but it makes the game
         # more interesting
-        return random.choice(available)[0]
+        return self.__random.choice(available)[0]
 
     def __find_best_move_of_length(
         self, moves: Moves, board: Board, length: int, checker: Checker

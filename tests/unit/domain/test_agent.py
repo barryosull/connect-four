@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+import random
 from domain.agent import Agent
 from domain.board import Board
 from domain.checker import Checker
@@ -146,9 +148,12 @@ class TestAgent:
                 ["-", "-", "-", "y", "-", "-", "-"],
             ]
         )
-        agent = Agent()
+        coord = (2, 5)
+        random.choice = Mock(return_value = coord)
+
+        agent = Agent(random)
 
         actual = agent.select_next_slot(Checker.RED, board)
-
-        unexpected = 3
-        assert actual != unexpected
+        
+        expected = 2
+        assert actual == expected
