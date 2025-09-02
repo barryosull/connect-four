@@ -1,14 +1,14 @@
 import os
 from pathlib import Path
-from domain.board import Board, Winner
+from domain.board import State
 from domain.checker import Checker
 
 # Renders to the console
 
 
 class Renderer:
-    def print_board(self, board: Board, winner: Winner | None = None):
-        cells = board.export_cells()
+    def print_board(self, state: State):
+        cells = state.cells
 
         # Cell colours
         char_to_colour = {"r": 31, "y": 33}
@@ -20,11 +20,11 @@ class Renderer:
 
         self.__print_title()
 
-        col_count = board.width()
+        col_count = len(cells[0])
         lines = padding + " "
 
         # Slot numbers
-        for row_i in range(board.width()):
+        for row_i in range(col_count):
             lines += f" {str(row_i + 1)}"
         lines += "\n"
 
@@ -34,7 +34,7 @@ class Renderer:
             for x, cell in enumerate(row):
                 # Bold and color
                 color = char_to_colour.get(cell, 38)
-                bg_color = 47 if winner and winner.is_in_list((x, y)) else 40
+                bg_color = 47 if state.winner and state.winner.is_in_list((x, y)) else 40
                 weight = 1 if cell != "-" else 0
                 cell_char = cell if cell != "-" else "-"
 
@@ -48,11 +48,11 @@ class Renderer:
 
         print(lines)
 
-        if winner is not None:
-            self.print_winner(winner.checker)
+        if state.winner is not None:
+            self.print_winner(state.winner.checker)
             return
 
-        if board.is_full():
+        if state.is_full:
             self.print_board_is_full()
 
     def __print_title(self):

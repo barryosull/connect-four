@@ -20,15 +20,15 @@ class Game:
 
     def play(self) -> Option:
         board = Board()
+        state = board.state()
 
         players = self.__player_factory.make_players()
         player = players[0]
 
         choice: Action
-        winner = None
 
-        while winner is None and not board.is_full():
-            self.__renderer.print_board(board)
+        while state.winner is None and not state.is_full:
+            self.__renderer.print_board(state)
 
             choice = player.select_action(board)
 
@@ -37,12 +37,15 @@ class Game:
 
             slot = int(choice)
 
-            coord = board.drop_checker(player.checker, slot)
-            winner = board.find_winner(player.checker, coord) if coord is not None else None
+            board.drop_checker(player.checker, slot)
+            
+            state = board.state()
 
             # Next player
             player = players[0] if player == players[1] else players[1]
+            
 
-        self.__renderer.print_board(board, winner)
+        self.__renderer.print_board(state)
         self.__renderer.print_goodbye()
         return Option.QUIT
+

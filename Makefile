@@ -6,5 +6,5 @@ init:
 	pip install -r requirements.txt
 
 lint:
-	
+	mypy src/main.py 
 	ruff check

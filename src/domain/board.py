@@ -1,10 +1,10 @@
+from dataclasses import dataclass
 from domain.checker import Checker
 
 type BoardCells = list[list[str]]
 type Coord = tuple[int, int]
 type Line = list[Coord]
 type Moves = dict[Coord, list[Line]]
-
 
 # Should be moved to own file
 class Winner:
@@ -24,8 +24,17 @@ class Winner:
         return False
 
 
+@dataclass
+class State:
+    cells: BoardCells    
+    is_full: bool
+    winner: Winner | None
+
+
 class Board:
     WIN_LENGTH = 4
+
+    __last_drop: tuple[Checker, Coord] | None
 
     def __init__(self, cells: BoardCells | None = None):
         self.__cells = (
@@ -40,6 +49,7 @@ class Board:
                 ["-", "-", "-", "-", "-", "-", "-"],
             ]
         )
+        self.__last_drop = None
 
     #############
     # Comannds
@@ -50,11 +60,21 @@ class Board:
         if coord is None:
             return None
         self.__cells[coord[1]][coord[0]] = checker.value
+        self.__last_drop = (checker, coord)
         return coord
+
 
     #############
     # Queries
     #############
+
+    def state(self) -> State:
+        winner = (
+            self.find_winner(self.__last_drop[0], self.__last_drop[1]) 
+            if self.__last_drop is not None
+            else None
+        )
+        return State(self.export_cells(), self.is_full(), winner)
 
     def width(self) -> int:
         return len(self.__cells[0])
