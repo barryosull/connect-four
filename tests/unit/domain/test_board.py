@@ -1,4 +1,4 @@
-from domain.board import Board, Winner
+from domain.board import Board
 from domain.checker import Checker
 
 

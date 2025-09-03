@@ -1,17 +1,13 @@
+import random
 from domain.board import Board
 from domain.board_dtos import Moves, Coord
 from domain.checker import Checker
 import domain.finders as finders
-import random
-
 from domain.state import State
 
 
 # Simple heuristic based agent that tries to choose the best move
 class Agent:
-
-    def __init__(self, random: random = random):
-        self.__random = random
 
     def select_next_slot(self, checker: Checker, state: State) -> int:
         board = state.board
@@ -48,7 +44,7 @@ class Agent:
 
         # Select random by default, not optimal, but it makes the game
         # more interesting
-        return self.__random.choice(available)[0]
+        return random.choice(available)[0]
 
     def __find_best_move_of_length(
         self, moves: Moves, board: Board, length: int, checker: Checker

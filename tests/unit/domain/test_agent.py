@@ -154,7 +154,7 @@ class TestAgent:
         coord = (2, 5)
         random.choice = Mock(return_value = coord)
 
-        agent = Agent(random)
+        agent = Agent()
 
         actual = agent.select_next_slot(Checker.RED, game_state)
         

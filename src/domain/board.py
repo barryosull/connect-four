@@ -25,10 +25,10 @@ class Board:
     # Comannds
     #############
 
-    def drop_checker(self, checker: Checker, slot: int) -> Coord:
+    def drop_checker(self, checker: Checker, slot: int) -> Coord | None:
         coord = self.__find_free_coord(slot)
         if coord is None:
-            return
+            return None
         self.__cells[coord[1]][coord[0]] = checker.value
         return coord
 

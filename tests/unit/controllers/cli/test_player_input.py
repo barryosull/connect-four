@@ -2,7 +2,6 @@ from domain.actions import Option
 from domain.checker import Checker
 from domain.board import Board
 from controllers.cli.player_input import PlayerInput
-from domain.game import Game
 from domain.state import State
 
 

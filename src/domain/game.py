@@ -22,6 +22,9 @@ class Game:
         
         checker = self.__players[self.__current_player_index]
         drop_coord = self.__board.drop_checker(self.__players[self.__current_player_index], slot)
+        if (drop_coord is None):
+            return
+
         self.__last_drop = (checker, drop_coord)
         self.__current_player_index = (self.__current_player_index + 1) % len(self.__players)
 

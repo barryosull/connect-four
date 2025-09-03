@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from domain.board import Board
 from domain.checker import Checker
 from domain.actions import Action, Option
 from domain.state import State
