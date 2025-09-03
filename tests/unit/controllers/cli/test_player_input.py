@@ -2,12 +2,15 @@ from domain.actions import Option
 from domain.checker import Checker
 from domain.board import Board
 from controllers.cli.player_input import PlayerInput
+from domain.game import Game
+from domain.state import State
 
 
 class TestPlayerInput:
+
     def setup(self, mocker):
         self.renderer = mocker.Mock()
-        self.board = Board()
+        self.state = State(Board(), [], Checker.RED, None)
 
         self.player = PlayerInput(Checker.RED, self.renderer)
 
@@ -17,7 +20,7 @@ class TestPlayerInput:
         converted_slot = 2  # Player input starts at one, domain slots start at 0
         self.override_inputs(monkeypatch, [choose_slot])
 
-        actual = self.player.select_action(self.board)
+        actual = self.player.select_action(self.state)
 
         assert actual == converted_slot
 
@@ -26,7 +29,7 @@ class TestPlayerInput:
         input_char = PlayerInput.QUIT_CHAR
         self.override_inputs(monkeypatch, [input_char])
 
-        actual = self.player.select_action(self.board)
+        actual = self.player.select_action(self.state)
 
         assert actual == Option.QUIT
 
@@ -36,7 +39,7 @@ class TestPlayerInput:
         valid_char = PlayerInput.QUIT_CHAR
         self.override_inputs(monkeypatch, invalid_chars + [valid_char])
 
-        actual = self.player.select_action(self.board)
+        actual = self.player.select_action(self.state)
 
         assert actual == Option.QUIT
 
@@ -45,12 +48,17 @@ class TestPlayerInput:
         full_slot = 2
         empty_slot = 0
         empty_slot_input = "1"
-        board = self.make_board_with_full_slot(full_slot)
+        state = State(
+            self.make_board_with_full_slot(full_slot),
+            [],
+            Checker.RED,
+            None
+        )
 
         inputs = [full_slot, empty_slot_input]
         self.override_inputs(monkeypatch, inputs)
 
-        actual = self.player.select_action(board)
+        actual = self.player.select_action(state)
 
         assert actual == empty_slot
 

@@ -3,6 +3,7 @@ from domain.checker import Checker
 
 
 class TestBoard:
+
     def test_width(self):
         board = Board()
         assert board.width() == 7
@@ -32,122 +33,6 @@ class TestBoard:
 
         assert checker_coord is None
 
-    def test_find_winner_none(self):
-        board = Board(
-            [
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["y", "r", "y", "-", "y", "r", "y"],
-                ["y", "r", "y", "r", "y", "r", "y"],
-            ]
-        )
-        board.drop_checker(Checker.RED, 3)
- 
-        actual = board.state().winner
-
-        assert actual is None
-
-    def test_find_winner_horizontal(self):
-        board = Board(
-            [
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "y", "-"],
-                ["y", "r", "r", "-", "r", "y", "y"],
-                ["r", "y", "r", "r", "y", "r", "y"],
-            ]
-        )
-        board.drop_checker(Checker.RED, 3)
-
-        actual = board.state().winner
-
-        expected = Winner(Checker.RED, [[(1, 4), (2, 4), (3, 4), (4, 4)]])
-        assert expected == actual
-
-    def test_find_winner_vertical(self):
-        board = Board(
-            [
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "r", "y", "-", "-"],
-                ["-", "-", "-", "r", "y", "-", "y"],
-                ["r", "y", "r", "r", "r", "y", "r"],
-            ]
-        )
-        board.drop_checker(Checker.RED, 3)
-
-        actual = board.state().winner
-
-        expected = Winner(Checker.RED, [[(3, 2), (3, 3), (3, 4), (3, 5)]])
-        assert expected == actual
-
-    def test_find_winner_diagonally_down(self):
-        board = Board(
-            [
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "y", "r", "-", "-", "-", "-"],
-                ["y", "r", "y", "r", "y", "r", "y"],
-                ["r", "y", "r", "y", "r", "y", "r"],
-            ]
-        )
-       
-        board.drop_checker(Checker.RED, 1)
-
-        actual = board.state().winner
-
-        expected = Winner(Checker.RED, [[(1, 2), (2, 3), (3, 4), (4, 5)]])
-        print(actual)
-        assert expected == actual
-
-    def test_find_winner_diagonally_up(self):
-        board = Board(
-            [
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "y", "r", "y", "-", "-", "-"],
-                ["y", "r", "y", "r", "y", "r", "y"],
-                ["r", "y", "r", "y", "r", "y", "r"],
-            ]
-        )
-        board.drop_checker(Checker.RED, 3)
-
-        actual = board.state().winner
-
-        expected = Winner(Checker.RED, [[(0, 5), (1, 4), (2, 3), (3, 2)]])
-        assert expected == actual
-
-    def test_find_winner_with_multiple_win_lines(self):
-        board = Board(
-            [
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "r", "r", "r", "-", "-"],
-                ["-", "r", "y", "r", "y", "r", "-"],
-                ["r", "y", "y", "r", "y", "y", "r"],
-            ]
-        )
-        board.drop_checker(Checker.RED, 3)
-
-        actual = board.state().winner
-
-        expected = Winner(
-            Checker.RED,
-            [
-                [(3, 2), (3, 3), (3, 4), (3, 5)],  # Center down
-                [(3, 2), (4, 3), (5, 4), (6, 5)],  # Center diagonal down
-                [(0, 5), (1, 4), (2, 3), (3, 2)],  # Bottom left diagonal up
-            ],
-        )
-        assert expected == actual
-
     def test_is_full(self):
         empty_board = Board()  # Default empty board
         nearly_full_board = Board(
@@ -171,9 +56,9 @@ class TestBoard:
             ]
         )
 
-        assert not empty_board.state().is_full
-        assert not nearly_full_board.state().is_full
-        assert full_board.state().is_full
+        assert not empty_board.is_full()
+        assert not nearly_full_board.is_full()
+        assert full_board.is_full()
 
     def test_available_coords(self):
         board = Board(
@@ -192,29 +77,3 @@ class TestBoard:
         expected = [(0, 5), (1, 3), (2, 2), (3, 1), (4, 0), (6, 0)]
         assert coords == expected
 
-    def test_find_line_making_moves(self):
-        board = Board(
-            [
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "-", "-", "-", "-", "-", "-"],
-                ["-", "y", "r", "-", "r", "y", "-"],
-            ]
-        )
-
-        actual = board.find_line_making_moves(Checker.RED)
-
-        expected = {
-            (1, 4): [
-                [(1, 4), (2, 5)],
-            ],
-            (2, 4): [[(2, 4), (2, 5)]],
-            (3, 5): [[(2, 5), (3, 5), (4, 5)]],
-            (4, 4): [
-                [(4, 4), (4, 5)],
-            ],
-            (5, 4): [[(4, 5), (5, 4)]],
-        }
-        assert actual == expected

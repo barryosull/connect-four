@@ -1,8 +1,8 @@
 from domain.actions import Action, Option
 from domain.checker import Checker
-from domain.board import Board
 from controllers.cli.player_interface import PlayerInterface
 from controllers.cli.player_input import PlayerInput
+from domain.state import State
 
 type Actions = list[Action]
 
@@ -15,7 +15,7 @@ class PlayerSetInput(PlayerInterface):
         self.__input = input.copy()
         self.checker = checker
 
-    def select_action(self, board: Board) -> Action:
+    def select_action(self, state: State) -> Action:
         if len(self.__input) == 0:
             return Option.QUIT
         action = self.__input.pop(0)

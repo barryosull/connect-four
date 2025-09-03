@@ -2,9 +2,11 @@ from controllers.cli.player_factory import PlayerFactory
 from controllers.cli.player_input import PlayerInput
 from controllers.cli.player_set_input import PlayerSetInput
 from controllers.cli.player_agent import PlayerAgent
+from domain.checker import Checker
 
 
 class TestPlayerFactory:
+    
     def test_make_input_and_agent_by_default(self, mocker):
         renderer = mocker.Mock()
         factory = PlayerFactory(renderer)
@@ -12,9 +14,9 @@ class TestPlayerFactory:
 
         players = factory.make_players(no_cli_args)
 
-        assert len(players) == 2
-        assert isinstance(players[0], PlayerInput)
-        assert isinstance(players[1], PlayerAgent)
+        assert len(list(players.keys())) == 2
+        assert isinstance(players[Checker.RED], PlayerInput)
+        assert isinstance(players[Checker.YELLOW], PlayerAgent)
 
     def test_make_set_actions_from_cli_args(self, mocker):
         renderer = mocker.Mock()
@@ -35,6 +37,6 @@ class TestPlayerFactory:
         players = factory.make_players(cli_args)
 
         set_action_players = list(
-            filter(lambda player: isinstance(player, PlayerSetInput), players)
+            filter(lambda player: isinstance(player, PlayerSetInput), list(players.values()))
         )
         assert len(set_action_players) == 2

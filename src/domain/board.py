@@ -1,40 +1,9 @@
-from dataclasses import dataclass
+from domain.board_dtos import BoardCells, Coord, Line
 from domain.checker import Checker
-
-type BoardCells = list[list[str]]
-type Coord = tuple[int, int]
-type Line = list[Coord]
-type Moves = dict[Coord, list[Line]]
-
-# Should be moved to own file
-class Winner:
-    def __init__(self, checker: Checker, lines: list[list[Coord]]):
-        self.checker = checker
-        self.lines = lines        
-
-    def __eq__(self, other):
-        if not isinstance(other, Winner):
-            return False
-        return self.checker == other.checker and self.lines == other.lines
-
-    def is_in_list(self, coord: Coord) -> bool:
-        for line in self.lines:
-            if coord in line:
-                return True
-        return False
-
-
-@dataclass
-class State:
-    cells: BoardCells    
-    is_full: bool
-    winner: Winner | None
+from domain.winner import Winner
 
 
 class Board:
-    WIN_LENGTH = 4
-
-    __last_drop: tuple[Checker, Coord] | None
 
     def __init__(self, cells: BoardCells | None = None):
         self.__cells = (
@@ -51,16 +20,16 @@ class Board:
         )
         self.__last_drop = None
 
+
     #############
     # Comannds
     #############
 
-    def drop_checker(self, checker: Checker, slot: int) -> Coord | None:
+    def drop_checker(self, checker: Checker, slot: int) -> Coord:
         coord = self.__find_free_coord(slot)
         if coord is None:
-            return None
+            return
         self.__cells[coord[1]][coord[0]] = checker.value
-        self.__last_drop = (checker, coord)
         return coord
 
 
@@ -68,50 +37,24 @@ class Board:
     # Queries
     #############
 
-    def state(self) -> State:
-        winner = (
-            self.find_winner(self.__last_drop[0], self.__last_drop[1]) 
-            if self.__last_drop is not None
-            else None
-        )
-        return State(self.__export_cells(), self.__is_full(), winner)
-
     def width(self) -> int:
         return len(self.__cells[0])
 
     def height(self) -> int:
         return len(self.__cells)
-
-    def is_valid_drop(self, slot: int) -> bool:
-        return self.__find_free_coord(slot) is not None
-
-    def find_winner(self, checker: Checker, coord: Coord) -> Winner | None:
-        [x, y] = coord
-
-        lines_with_coord = self.__find_lines_with_coord(checker, coord)
-
-        winning_lines = list(
-            filter(lambda line: len(line) >= self.WIN_LENGTH, lines_with_coord)
-        )
-
-        # Check for winners
-        if len(winning_lines) == 0:
-            return None
-
-        print(checker, winning_lines)
-
-        return Winner(checker, winning_lines)
     
-    def find_line_making_moves(self, checker: Checker) -> Moves:
-        available_coords = self.available_coords()
-        moves = {}
-        for coord in available_coords:
-            lines_with_coord = self.__find_lines_with_coord(checker, coord)
-
-            if len(lines_with_coord) > 0:
-                moves[coord] = lines_with_coord
-        return moves
-
+    def coord_value(self, coord: Coord) -> str:
+        [x, y] = coord
+        return self.__cells[y][x]
+    
+    def winner(self) -> Winner| None:
+        return (
+            self.__searcher.find_winning_move(self.__last_drop[0], self.__last_drop[1]) 
+            if self.__last_drop is not None
+            else None
+        )
+        
+    # TODO: Use free slots everywhere instead
     def available_coords(self) -> Line:
         available = []
         for x in range(0, self.width()):
@@ -120,11 +63,8 @@ class Board:
                 available.append(coord)
         return available
 
-    def __is_full(self) -> bool:
+    def is_full(self) -> bool:
         return "-" not in self.__cells[0]
-
-    def __export_cells(self) -> BoardCells:
-        return self.__cells
     
     def __find_free_coord(self, slot: int) -> Coord | None:
         x = slot
@@ -133,33 +73,3 @@ class Board:
             if self.__cells[y][x] == "-":
                 return (x, y)
         return None
-    
-    # Search all lines expanding outward from the coord
-    def __find_lines_with_coord(self, checker: Checker, coord: Coord) -> list[Line]:
-        lines = []
-        # up, up right, right, down right
-        directions = [(0, 1), (1, 1), (1, 0), (1, -1)]
-        for direction in directions:
-            line = [coord]
-
-            # Go "left"
-            offset = coord
-            offset = (offset[0] - direction[0], offset[1] - direction[1])
-            while (0 <= offset[0] < self.width() and 0 <= offset[1] < self.height()):
-                if self.__cells[offset[1]][offset[0]] != checker.value:
-                    break
-                line.insert(0, offset)
-                offset = (offset[0] - direction[0], offset[1] - direction[1])
-
-            # Go "right"
-            offset = coord
-            offset = (offset[0] + direction[0], offset[1] + direction[1])
-            while (0 <= offset[0] < self.width() and 0 <= offset[1] < self.height()):
-                if self.__cells[offset[1]][offset[0]] != checker.value:
-                    break
-                line.append(offset)
-                offset = (offset[0] + direction[0], offset[1] + direction[1])
-
-            if (len(line) > 1):
-                lines.append(line)
-        return lines
