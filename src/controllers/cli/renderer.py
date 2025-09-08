@@ -16,7 +16,7 @@ class Renderer:
         # Clear the termninal
         os.system("clear")
 
-        self.__print_title()
+        self.__print_title(state)
 
         col_count = state.board.width()
         lines = padding + " "
@@ -54,11 +54,15 @@ class Renderer:
         if state.board.is_full():
             self.print_board_is_full()
 
-    def __print_title(self):
+    def __print_title(self, state: State):
         # Todo: Fix relative path, not sure of the python way to do this yet
         file_path = Path("src/controllers/cli//title.txt")
         title = file_path.read_text()
         print(title)
+
+        mode = f"Mode: {state.mode}"
+        print(mode)
+        print()
 
     def print_agent_thinking(self, checker: Checker):
         print(f"Player '{checker}' is thinking . . .")

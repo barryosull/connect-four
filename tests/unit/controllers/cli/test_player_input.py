@@ -9,7 +9,7 @@ class TestPlayerInput:
 
     def setup(self, mocker):
         self.renderer = mocker.Mock()
-        self.state = State(Board(), [], Checker.RED, None)
+        self.state = State(Board(), '', [], Checker.RED, None)
 
         self.player = PlayerInput(Checker.RED, self.renderer)
 
@@ -49,6 +49,7 @@ class TestPlayerInput:
         empty_slot_input = "1"
         state = State(
             self.make_board_with_full_slot(full_slot),
+            '',
             [],
             Checker.RED,
             None

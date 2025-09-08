@@ -1,4 +1,5 @@
 from domain.board import Board
+from domain.line_finder import DefaultLineFinder, LineFinder
 from domain.state import State
 from domain.board_dtos import Coord
 from domain.checker import Checker
@@ -10,10 +11,16 @@ class Game:
 
     __last_drop: tuple[Checker, Coord] | None
 
-    def __init__(self, board: Board, players: list[Checker] = [Checker.RED, Checker.YELLOW]):
+    def __init__(
+        self, 
+        board: Board, 
+        players: list[Checker] = [Checker.RED, Checker.YELLOW],
+        line_finder_strategy: LineFinder = DefaultLineFinder()
+    ):
         self.__board = board
         self.__players = players
         self.__current_player_index = 0
+        self.__line_finder_strategy = line_finder_strategy
         self.__last_drop = None
 
     def drop_checker(self, slot: int):
@@ -30,7 +37,7 @@ class Game:
 
     def winner(self) -> Winner| None:
         return (
-            Finders().winning_move(self.__board, self.__last_drop[0], self.__last_drop[1]) 
+            Finders(self.__line_finder_strategy).winning_move(self.__board, self.__last_drop[0], self.__last_drop[1]) 
             if self.__last_drop is not None
             else None
         )
@@ -38,6 +45,7 @@ class Game:
     def state(self) -> State: 
         return State(
             self.__board, 
+            str(self.__line_finder_strategy),
             self.__players,
             self.__players[self.__current_player_index],
             self.winner()

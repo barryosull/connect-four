@@ -3,13 +3,15 @@ from domain.board import Board
 from domain.board_dtos import Moves, Coord
 from domain.checker import Checker
 from domain.finders import Finders
+from domain.line_finder import DefaultLineFinder, LineFinder
 from domain.state import State
 
 
 # Simple heuristic based agent that tries to choose the best move
 class Agent:
 
-    __finders = Finders()
+    def __init__(self, line_finder: LineFinder = DefaultLineFinder()):
+        self.__finders = Finders(line_finder)
 
     def select_next_slot(self, checker: Checker, state: State) -> int:
         board = state.board

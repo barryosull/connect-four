@@ -5,6 +5,8 @@ from controllers.cli.renderer import Renderer
 from domain.game import Game
 import argparse
 
+from domain.line_finder import DefaultLineFinder, LineFinder, TorusLineFinder
+
 
 class CLIGame:
 
@@ -21,14 +23,15 @@ class CLIGame:
         )
 
     def play(self) -> Option:
-
         args = self.__parse_args()
 
-        players = self.__player_factory.make_players(args)
+        line_finder_strategy = self.__make_line_finder_strategy(args)
+
+        players = self.__player_factory.make_players(args, line_finder_strategy)
 
         fresh_board = board.make_empty_board(args.width, args.height)
         
-        game = Game(fresh_board, list(players.keys()))
+        game = Game(fresh_board, list(players.keys()), line_finder_strategy)
         state = game.state()
 
         choice: Action
@@ -57,9 +60,16 @@ class CLIGame:
             prog="Connect Four", description="Play a game of connect four"
         )
 
+        parser.add_argument("-m", "--mode", type=str, default="default")
         parser.add_argument("-p1", "--player1Actions", nargs="*", type=str)
         parser.add_argument("-p2", "--player2Actions", nargs="*", type=str)
         parser.add_argument("-w", "--width", type=int, default=7)
         parser.add_argument("-he", "--height", type=int, default=6)
         return parser.parse_args()
 
+    def __make_line_finder_strategy(self, args) -> LineFinder:
+        match (args.mode):
+            case "torus":
+                return TorusLineFinder()
+            case default:
+                return DefaultLineFinder()
