@@ -1,6 +1,6 @@
 from domain.board import Board, Winner
 from domain.checker import Checker
-import domain.finders as finders
+from domain.finders import Finders
 
 
 class TestFinders:
@@ -17,7 +17,7 @@ class TestFinders:
             ]
         )
        
-        actual = finders.winning_move(board, Checker.RED, (3, 4))
+        actual = Finders().winning_move(board, Checker.RED, (3, 4))
 
         expected = Winner(Checker.RED, [[(1, 4), (2, 4), (3, 4), (4, 4)]])
         assert expected == actual
@@ -34,7 +34,7 @@ class TestFinders:
             ]
         )
 
-        actual = finders.winning_move(board, Checker.RED, (3, 2))
+        actual = Finders().winning_move(board, Checker.RED, (3, 2))
 
         expected = Winner(Checker.RED, [[(3, 2), (3, 3), (3, 4), (3, 5)]])
         assert expected == actual
@@ -51,7 +51,7 @@ class TestFinders:
             ]
         )
        
-        actual = finders.winning_move(board, Checker.RED, (1, 2))
+        actual = Finders().winning_move(board, Checker.RED, (1, 2))
 
         expected = Winner(Checker.RED, [[(1, 2), (2, 3), (3, 4), (4, 5)]])
         print(actual)
@@ -69,7 +69,7 @@ class TestFinders:
             ]
         )
 
-        actual = finders.winning_move(board, Checker.RED, (3, 2))
+        actual = Finders().winning_move(board, Checker.RED, (3, 2))
 
         expected = Winner(Checker.RED, [[(0, 5), (1, 4), (2, 3), (3, 2)]])
         assert expected == actual
@@ -86,7 +86,7 @@ class TestFinders:
             ]
         )
         
-        actual = finders.winning_move(board, Checker.RED, (3, 2))
+        actual = Finders().winning_move(board, Checker.RED, (3, 2))
 
         expected = Winner(
             Checker.RED,
@@ -110,7 +110,7 @@ class TestFinders:
             ]
         )
        
-        actual = finders.winning_move(board, Checker.RED, (3, 4))
+        actual = Finders().winning_move(board, Checker.RED, (3, 4))
 
         assert actual is None
 
@@ -126,7 +126,7 @@ class TestFinders:
             ]
         )
 
-        actual = finders.line_making_moves(board, Checker.RED)
+        actual = Finders().line_making_moves(board, Checker.RED)
 
         expected = {
             (1, 4): [

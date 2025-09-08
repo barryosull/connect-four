@@ -2,20 +2,22 @@ import random
 from domain.board import Board
 from domain.board_dtos import Moves, Coord
 from domain.checker import Checker
-import domain.finders as finders
+from domain.finders import Finders
 from domain.state import State
 
 
 # Simple heuristic based agent that tries to choose the best move
 class Agent:
 
+    __finders = Finders()
+
     def select_next_slot(self, checker: Checker, state: State) -> int:
         board = state.board
-        moves = finders.line_making_moves(board, checker)
-        other_player_moves = finders.line_making_moves(board, checker.opponent())
+        moves = self.__finders.line_making_moves(board, checker)
+        other_player_moves = self.__finders.line_making_moves(board, checker.opponent())
 
         for offset in range(0, 3):
-            length = finders.WIN_LENGTH - offset
+            length = self.__finders.WIN_LENGTH - offset
 
             # Best move for player
             best_move = self.__find_best_move_of_length(
@@ -36,9 +38,7 @@ class Agent:
         # Select middle if available, as it's the best position if
         # there are no others
         available = board.available_coords()
-        
-        # TODO: stop hard coding it
-        middle = (3, 5)
+        middle = (board.width() // 2, board.height() - 1)
         if middle in available:
             return middle[0]
 
@@ -56,7 +56,7 @@ class Agent:
             # Find best move, but make sure it doesnt let the other player
             # win immedaitely afterwards (skip for winning move)
             if len(expanded_lines) > lines_found and (
-                length == finders.WIN_LENGTH
+                length == self.__finders.WIN_LENGTH
                 or not self.__would_move_let_opponent_win(
                     move, board, checker.opponent()
                 )
@@ -71,4 +71,4 @@ class Agent:
         if move[1] == 0:
             return False
         move_above = (move[0], move[1] - 1)
-        return finders.winning_move(board, checker, move_above) is not None
+        return self.__finders.winning_move(board, checker, move_above) is not None

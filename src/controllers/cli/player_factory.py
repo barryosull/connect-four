@@ -13,22 +13,13 @@ class PlayerFactory:
     def __init__(self, renderer: Renderer):
         self.__renderer = renderer
 
-    def make_players(self, cli_args: list[str] = sys.argv[1:]) -> dict[Checker, PlayerInterface]:
-        parser = argparse.ArgumentParser(
-            prog="Connect Four", description="Play a game of connect four"
-        )
-
-        parser.add_argument("-p1", "--player1Actions", nargs="*", type=str)
-        parser.add_argument("-p2", "--player2Actions", nargs="*", type=str)
-
-        parsed_args = parser.parse_args(cli_args)
-
+    def make_players(self, parsed_args) -> dict[Checker, PlayerInterface]:
         return {
             Checker.RED: self.make_player(Checker.RED, parsed_args.player1Actions),
             Checker.YELLOW: self.make_player(Checker.YELLOW, parsed_args.player2Actions) 
         }
 
-    def make_player(self, checker: Checker, player_actions: list[str]):
+    def make_player(self, checker: Checker, player_actions: list[str] | None):
         if player_actions is not None:
             return PlayerSetInput(checker, player_actions)
         if checker == Checker.YELLOW:

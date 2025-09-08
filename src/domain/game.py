@@ -3,7 +3,7 @@ from domain.state import State
 from domain.board_dtos import Coord
 from domain.checker import Checker
 from domain.winner import Winner
-import domain.finders as finders
+from domain.finders import Finders
 
 
 class Game:
@@ -30,7 +30,7 @@ class Game:
 
     def winner(self) -> Winner| None:
         return (
-            finders.winning_move(self.__board, self.__last_drop[0], self.__last_drop[1]) 
+            Finders().winning_move(self.__board, self.__last_drop[0], self.__last_drop[1]) 
             if self.__last_drop is not None
             else None
         )

@@ -77,3 +77,22 @@ class TestBoard:
         expected = [(0, 5), (1, 3), (2, 2), (3, 1), (4, 0), (6, 0)]
         assert coords == expected
 
+    def test_bigger_board(self):
+        board = Board(
+            [
+                ["-", "-", "-", "-", "-", "-", "-", "-"],
+                ["-", "-", "-", "-", "-", "r", "-", "-"],
+                ["-", "-", "-", "-", "r", "r", "y", "-"],
+                ["-", "-", "-", "y", "r", "r", "y", "-"],
+                ["-", "-", "r", "y", "y", "y", "r", "-"],
+                ["-", "r", "y", "r", "y", "r", "y", "-"],
+                ["-", "y", "r", "y", "r", "y", "r", "-"],
+            ]
+        )
+
+        checker_coord = board.drop_checker(Checker.RED, 7)
+
+        assert board.width() == 8
+        assert board.height() == 7
+        assert checker_coord == (7, 6)
+

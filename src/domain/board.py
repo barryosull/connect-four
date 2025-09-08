@@ -54,7 +54,6 @@ class Board:
             else None
         )
         
-    # TODO: Use free slots everywhere instead
     def available_coords(self) -> Line:
         available = []
         for x in range(0, self.width()):
@@ -73,3 +72,9 @@ class Board:
             if self.__cells[y][x] == "-":
                 return (x, y)
         return None
+
+def make_empty_board(width: int, height: int) -> Board:
+    row = ['-'] * width
+    cells = [row] * height
+    return Board(cells)
+

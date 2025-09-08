@@ -37,6 +37,8 @@ class TestMain:
         command = f"python /app/src/main.py --player1Actions {player1Actions} --player2Actions {player2Actions}"
         result = subprocess.check_output(command, shell=True, text=True)
 
+        print(result)
+
         # Assert
         assert "Board is full" in result
         assert "Thanks for playing!" in result
